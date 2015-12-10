@@ -1,0 +1,14 @@
+SNS：
+create table sns(snsID int primary key, snsName varchar(255)) engine=InnoDB;
+
+画像：
+create table photo(photoID int primary key, photoURL varchar(255), postedDate date, snsID int, foreign key(snsID) references sns(snsID)) engine=InnoDB;
+
+期間：
+create table period(periodID int primary key, periodType varchar(255)) engine=InnoDB;
+
+カテゴリー：
+create table category(categoryID int primary key, categoryName varchar(255), categoryPercentage int, categoryPostedNumber int, snsID int, periodID int, foreign key(snsID) references sns(snsID), foreign key(periodID) references period(periodID)) engine=InnoDB;
+
+種類：
+create table kind(kindID int primary key, kindName varchar(255), kindPercentage int, kindPostedNumber int, snsID int, categoryID int, periodID int, foreign key(snsID) references sns(snsID), foreign key(categoryID) references category(categoryID), foreign key(periodID) references period(periodID)) engine=InnoDB;
