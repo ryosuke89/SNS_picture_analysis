@@ -18,18 +18,18 @@ require_once '../common/scriptUtil.php';
       <br><br>
 
       メールアドレス：　　　　　
-      <input type="text" name="name">
+      <input type="text" name="address">
       <br><br>
 
       お問い合わせの種類：　
-      <select name="column">
+      <select name="contact_kind">
         <option value="" selected>--選択してください--</option>
         <option value="使い方">使い方</option>
         <option value="その他">その他</option>
       </select><br><br>
 
       お問い合わせ内容：　　
-      <textarea name="comment" rows=10 cols=50 style="resize:none" wrap="hard"></textarea><br><br><br>
+      <textarea name="contact_contents" rows=10 cols=50 style="resize:none" wrap="hard"></textarea><br><br><br>
         　　　　　　　　　　　　　　　　<input type="submit" name="NO" value="入力内容を確認する"><br>
       <?php echo return_top(); ?><br>
       <a href="<?php echo CONTACT; ?>">お問い合わせ</a>
