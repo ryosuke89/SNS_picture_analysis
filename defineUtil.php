@@ -1,5 +1,4 @@
 <?php
-
 const ROOT_URL = 'http://localhost/develop/sns_photos/app';   //indexディレクトリへのURL
 const TOP_URI = '/';                                          //トップページ
 const SNS = 'sns.php';                                        //SNSページ
