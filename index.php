@@ -1,12 +1,12 @@
-<?php
+﻿<?php
 require_once '../common/defineUtil.php';
 require_once '../common/scriptUtil.php';
 ?>
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-<meta charset="UTF-8">
-      <title>SNS Photos</title>
+  <meta charset="UTF-8">
+  <title>SNS Photos</title>
 </head>
   <body>
     <h1><a href="<?php echo ROOT_URL ?>">SNS Photos</a></h1>
@@ -26,10 +26,10 @@ require_once '../common/scriptUtil.php';
       サブサービス1<br>
       サブサービス2<br>
       サブサービス3<br><br>
-
-      <!--トップページへのリンク-->
-      <?php echo return_top(); ?><br>
-      <a href="<?php echo CONTACT; ?>">お問い合わせ</a>
     </form>
+
+    <!--トップページへのリンク-->
+    <?php echo return_top(); ?><br>
+    <a href="<?php echo CONTACT; ?>">お問い合わせ</a>
   </body>
 </html>
