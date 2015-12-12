@@ -5,8 +5,8 @@ require_once '../common/scriptUtil.php';
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-<meta charset="UTF-8">
-      <title>SNS Photos</title>
+  <meta charset="UTF-8">
+  <title>SNS Photos</title>
 </head>
   <body>
     <h1><a href="<?php echo ROOT_URL ?>">SNS Photos</a></h1>
@@ -14,10 +14,18 @@ require_once '../common/scriptUtil.php';
     <form action="<?php echo CONTACT_RESULT; ?>" method="POST">
 
       <?php
-      echo 'お名前：' . $_POST['name'] . "<br>";
-      echo 'メールアドレス：' . $_POST['mail_address'] . "<br>";
-      echo 'お問い合わせの種類：' . $_POST['contact_kind'] . "<br>";
-      echo 'お問い合わせ内容：' . $_POST['contact_contents'] . "<br>" . "<br>";
+      session_start();
+      //POSTの値をセッションに格納し、連想配列に値を格納
+      $confirm_values = array(
+                              'name' => confirm_session('name'),
+                              'mail_address' => confirm_session('mail_address'),
+                              'contact_kind' => confirm_session('contact_kind'),
+                              'contact_contents' => confirm_session('contact_contents'));
+
+      echo 'お名前：' . $confirm_values['name'] . "<br>";
+      echo 'メールアドレス：' . $confirm_values['mail_address'] . "<br>";
+      echo 'お問い合わせの種類：' . $confirm_values['contact_kind'] . "<br>";
+      echo 'お問い合わせ内容：' . $confirm_values['contact_contents'] . "<br>" . "<br>";
       ?>
       上記の内容で送信します。よろしいですか？<br><br>
       <input type="submit" name="yes" style="width:70px" value="送信する"><br>
@@ -27,7 +35,7 @@ require_once '../common/scriptUtil.php';
       <input type="submit" name="no" style="width:70px" value="戻る"><br>
     </form>
 
-      <?php echo return_top(); ?><br>
-      <a href="<?php echo CONTACT; ?>">お問い合わせ</a>
+    <?php echo return_top(); ?><br>
+    <a href="<?php echo CONTACT; ?>">お問い合わせ</a>
   </body>
 </html>
