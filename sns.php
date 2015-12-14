@@ -29,13 +29,18 @@ $result_kind = select_kind();
 
       // データテーブルの作成
       var data = new google.visualization.DataTable();
-      data.addColumn('string', 'SNS');
+      data.addColumn('string', 'カテゴリー');
       data.addColumn('number', '割合');
+      //円グラフにSNSの割合を表示する処理
+      <?php
+      foreach($result_category as $value_category){
+      ?>
       data.addRows([
-        ['動物', 40],
-        ['風景', 30],
-        ['その他', 30]
+        ['<?php echo $value_category['categoryName']; ?>', <?php echo $value_category['categoryPercentage']; ?>]
       ]);
+      <?php
+      }
+      ?>
 
       // チャートオプションの設定
       var options = {'title':'Twitterの割合',
