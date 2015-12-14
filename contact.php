@@ -12,6 +12,8 @@ require_once '../common/scriptUtil.php';
     <h1><a href="<?php echo ROOT_URL ?>">SNS Photos</a></h1>
     <h4>SNSに投稿されている画像の傾向分析サイト</h4><br>
     <form action="<?php echo CONTACT_CONFIRM; ?>" method="POST">
+      <h3>お問い合わせ</h3>
+      <!--再入力時用-->
       <?php session_start(); ?>
       <table>
         <tr>
@@ -38,6 +40,8 @@ require_once '../common/scriptUtil.php';
           <td><textarea name="contact_contents" rows=10 cols=50 style="resize:none" wrap="hard"><?php echo contact_session('contact_contents'); ?></textarea></td><br><br><br>
         </tr>
       </table>
+      <!--アクセスルートの確認用-->
+      <input type="hidden" name="mode" value="CONFIRM">
       <input type="submit" name="confirm" value="入力内容を確認する"><br>
     </form>
 
