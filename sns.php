@@ -1,6 +1,12 @@
 <?php
 require_once '../common/defineUtil.php';
 require_once '../common/scriptUtil.php';
+require_once '../common/dbaccesUtil.php';
+
+//categoryテーブルの値を取得
+$result_category = select_category();
+//kindテーブルの値を取得
+$result_kind = select_kind();
 ?>
 <!DOCTYPE html>
 <html lang="ja">
@@ -48,8 +54,35 @@ require_once '../common/scriptUtil.php';
     <!--円グラフの表示-->
     <div id="chart_div"></div>
     <form action="<?php echo SNS; ?>" method="POST">
-      <a href="<?php echo CATEGORY_DETAIL; ?>">動物</a>の割合：40％<br><br>
-      <a href="<?php echo CATEGORY_DETAIL; ?>">風景</a>の割合：30％<br><br>
+      <?php
+      //カテゴリーの種類の割合をテーブル型で表示
+      foreach($result_category as $value_category){
+          ?>
+          <a href="<?php echo CATEGORY_DETAIL; ?>"><?php echo $value_category['categoryName']; ?></a>の割合：<?php echo $value_category['categoryPercentage']; ?>％<br>
+          <table border=1>
+            <tr>
+              <td>種類</td>
+              <td>割合</td>
+              <td>投稿数</td>
+            </tr>
+
+            <?php
+            foreach($result_kind as $value_kind){
+                if($value_category['categoryID'] == $value_kind['categoryID']){
+                    ?>
+                    <tr>
+                      <td><?php echo $value_kind['kindName']; ?></td>
+                      <td><?php echo $value_kind['kindPercentage']; ?></td>
+                      <td><?php echo $value_kind['kindPostedNumber']; ?></td>
+                    </tr>
+                <?php
+                }
+            }
+            ?>
+          </table><br>
+      <?php
+      }
+      ?>
     </form>
 
     <?php echo return_top(); ?><br>
