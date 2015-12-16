@@ -7,17 +7,17 @@
     <?php
     $url = 'https://gateway.watsonplatform.net/visual-recognition-beta/api/v1/tag/recognize';
     $data = array(
-	                'username' => 'da6f5e0b-334d-4889-92b4-bcf4e013658a',
+                  'username' => 'da6f5e0b-334d-4889-92b4-bcf4e013658a',
                   'password' => 'YzXGqvlZJ83d'
     );
 
     $header = array(
-                    'Content-Type: application/x-www-form-urlencoded',
+                    'Content-Type: application/json',
                     sprintf('Authorization: Basic %s', base64_encode(sprintf('%s:%s', $data['username'], $data['password']))) // IDとPASSをbase64エンコードして放り込む
     );
 
     $options = array('http' => array(
-	                                   'method' => 'POST',
+                                     'method' => 'POST',
                                      'header'  => implode("\r\n", $header),
                                      'content' => http_build_query($data),
     ));
