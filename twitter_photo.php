@@ -12,7 +12,6 @@
     use Abraham\TwitterOAuth\TwitterOAuth;
 
     //設定
-    $keyword = "犬";//検索キーワード　「http」をAND検索するとより確実なように思う
     $consumerKey = "consumerKey";
     $consumerSecret = "consumerSecret";
     $accessToken = "accessToken";
@@ -27,7 +26,8 @@
         'https://api.twitter.com/1.1/search/tweets.json',
         'GET',
         array(
-                "q"=>rawurlencode($keyword), //検索キーワード
+                "q"=>"filter:images", //検索キーワード
+                "lang"=>"ja", //言語コード
                 "result_type"=>"recent", //新着順に取得
                 "count"=>20, //取得件数（100件が上限）
                 "include_entities"=>true //trueにすると添付URLについての情報を追加で取得できる
