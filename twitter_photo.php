@@ -1,4 +1,7 @@
-﻿<?php require_once 'twitteroauth/autoload.php'; ?>
+﻿<?php
+require_once 'twitteroauth/autoload.php';
+require_once 'api_dbaccesUtil.php';
+?>
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -46,16 +49,17 @@
         if($tweets_obj){
             //検索結果をjson_decodeで連想配列にしてforeach
             $tweets_arr = json_decode($tweets_obj, true);
-            //画像のURLを表示
+            //画像のURLを取得
             foreach($tweets_arr['statuses'] as $statuses){
                 if(isset($statuses['entities']['media'][0]['media_url'])){
                     $img = $statuses['entities']['media'][0]['media_url'];
-                    echo $img . "　";
-                    //投稿日を表示
+                    //投稿日を取得
                     $year = substr($tweets_arr['statuses'][0]['created_at'], 26, 4);
                     $month = substr($tweets_arr['statuses'][0]['created_at'], 4, 3);
                     $day = substr($tweets_arr['statuses'][0]['created_at'], 8, 2);
-                    echo date('Y-m-d', strtotime($year . '-' . $month . '-' . $day)) . "<br>";
+                    $date = date('Y-m-d', strtotime($year . '-' . $month . '-' . $day));
+                    //DBに画像のURLと投稿日を取得
+                    $result = insert_photo($img, $date, 1);
                 }
             }
         }
@@ -71,6 +75,7 @@
         //パラメータに変換
         parse_str($next_results, $params);
     }
+    echo '画像のURLを取得しました。';
     ?>
   </body>
 </html>
