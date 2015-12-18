@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿<?php require_once 'twitteroauth/autoload.php'; ?>
+<!DOCTYPE html>
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
@@ -9,7 +10,6 @@
     //https://github.com/abraham/twitteroauth
     //twitteroauthフォルダと同じ階層に置く
     //TwitterOAuth.phpの「private function oAuthRequest(url,method, $parameters)」のprivateを削除
-    require_once "twitteroauth/autoload.php";
     use Abraham\TwitterOAuth\TwitterOAuth;
 
     //設定
@@ -18,13 +18,12 @@
     $accessToken = "アクセストークン";
     $accessTokenSecret = "アクセストークンシークレット";
 
-
     //認証
     $connection = new TwitterOAuth($consumerKey,$consumerSecret,$accessToken,$accessTokenSecret);
 
     //ツイート検索パラメータの設定
     $params = array(
-          "q"=>"filter:images", //検索キーワード
+          "q"=>"犬 filter:images since:2015-12-16 until:2015-12-17", //検索キーワード
           "lang"=>"ja", //言語コード
           "count"=>2, //取得件数（100件が上限）
           "include_entities"=>true, //trueにすると添付URLについての情報を追加で取得できる
@@ -51,7 +50,12 @@
             foreach($tweets_arr['statuses'] as $statuses){
                 if(isset($statuses['entities']['media'][0]['media_url'])){
                     $img = $statuses['entities']['media'][0]['media_url'];
-                    echo $img . "<br>";
+                    echo $img . "　";
+                    //投稿日を表示
+                    $year = substr($tweets_arr['statuses'][0]['created_at'], 26, 4);
+                    $month = substr($tweets_arr['statuses'][0]['created_at'], 4, 3);
+                    $day = substr($tweets_arr['statuses'][0]['created_at'], 8, 2);
+                    echo date('Y-m-d', strtotime($year . '-' . $month . '-' . $day)) . "<br>";
                 }
             }
         }
