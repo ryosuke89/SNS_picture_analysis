@@ -24,22 +24,36 @@ require_once 'api_dbaccesUtil.php';
     //認証
     $connection = new TwitterOAuth($consumerKey,$consumerSecret,$accessToken,$accessTokenSecret);
 
-    //ツイート検索パラメータの設定
-    $params = array(
-          "q"=>"犬 filter:images since:2015-12-16 until:2015-12-17", //検索キーワード
-          "lang"=>"ja", //言語コード
-          "count"=>2, //取得件数（100件が上限）
-          "include_entities"=>true, //trueにすると添付URLについての情報を追加で取得できる
-          "result_type"=>"recent" //新着順に取得
-    );
     //$next_resultsの初期化
     $next_results = null;
+    //DB格納用にTwitterのsnsIDを設定
+    $snsID = 1;
+
+    //ツイート検索パラメータの設定
+    $params = array(
+          "q"=>"filter:images since:2015-12-16 until:2015-12-17", //検索キーワード
+          "lang"=>"ja",             //言語コード
+          "count"=>1,               //取得件数（100件が上限）
+          "include_entities"=>true, //trueにすると添付URLについての情報を追加で取得できる
+          "result_type"=>"recent",  //新着順に取得
+    );
+
+    //処理の確認
+    $hour = 2015-12-16 23:59:59;      //最後にDBに追加した投稿日時を入力
+    $db = false;                      //DBに追加する場合true
+    $next_page = false;               //次ページを検索する場合true
+    $tweet_id = "677262004333217791"; //次ページ検索用にツイートIDを入力
+
+    if($next_page == true){
+        $params += array("max_id"=>$tweet_id);
+    }
+
     //リクエスト回数
-    $request_number = 2;
+    $request_number = 1;
 
     for ($i = 0; $i < $request_number; $i++){
 
-        //検索結果の取得($objはJSONの検索結果が入る）
+        //検索結果の取得($tweets_objはJSONの検索結果が入る）
         $tweets_obj = $connection->OAuthRequest(
                                             'https://api.twitter.com/1.1/search/tweets.json',
                                             'GET',
@@ -47,19 +61,20 @@ require_once 'api_dbaccesUtil.php';
         );
 
         if($tweets_obj){
-            //検索結果をjson_decodeで連想配列にしてforeach
+            //検索結果をjson_decodeで連想配列に変換
             $tweets_arr = json_decode($tweets_obj, true);
             //画像のURLを取得
             foreach($tweets_arr['statuses'] as $statuses){
                 if(isset($statuses['entities']['media'][0]['media_url'])){
-                    $img = $statuses['entities']['media'][0]['media_url'];
-                    //投稿日を取得
-                    $year = substr($tweets_arr['statuses'][0]['created_at'], 26, 4);
-                    $month = substr($tweets_arr['statuses'][0]['created_at'], 4, 3);
-                    $day = substr($tweets_arr['statuses'][0]['created_at'], 8, 2);
-                    $date = date('Y-m-d', strtotime($year . '-' . $month . '-' . $day));
-                    //DBに画像のURLと投稿日を取得
-                    $result = insert_photo($img, $date, 1);
+                    $photoURL = $statuses['entities']['media'][0]['media_url'];
+                    //APIの日時に合わせる
+                    date_default_timezone_set('Europe/London');
+                    //投稿日時を取得
+                    $postedDate = date('Y-m-d H:i:s', strtotime($tweets_arr['statuses'][0]['created_at']));
+                    //DBに画像のURLと投稿日時を追加
+                    if($db == true){
+                        $result = insert_photo($photoURL, $postedDate, $snsID);
+                    }
                 }
             }
         }
@@ -67,7 +82,7 @@ require_once 'api_dbaccesUtil.php';
         //先頭の「?」を除去
         $next_results = preg_replace('/^\?/', '', $tweets_arr['search_metadata']['next_results']);
 
-        //next_resultsが無ければ処理を終了
+        //$next_resultsが無ければ処理を終了
         if(empty($next_results)){
             break;
         }
@@ -75,7 +90,16 @@ require_once 'api_dbaccesUtil.php';
         //パラメータに変換
         parse_str($next_results, $params);
     }
-    echo '画像のURLを取得しました。';
+    //エラーが発生しなければ表示
+    if(!isset($result)){
+        if($db == true){
+            echo '画像のURLを' . $params['count'] * $request_number . '件取得しました。<br>';
+        }else{
+            echo $params['count'] * $request_number . '件検索しました。<br>';
+        }
+            echo '投稿日時：' . $postedDate . "<br>";
+            echo '次ページのツイートID：' . $params['max_id'];
+    }
     ?>
   </body>
 </html>
