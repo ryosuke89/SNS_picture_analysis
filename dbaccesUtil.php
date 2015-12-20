@@ -12,13 +12,15 @@ function connect_MySQL(){
 }
 
 //categoryテーブルの値を取得する関数
-function select_category(){
+function select_category($snsID){
     //dbを確立
     $select_db = connect_MySQL();
     //SQL文
-    $select_sql = "SELECT * FROM category";
+    $select_sql = "SELECT * FROM category WHERE snsID=:snsID";
     //クエリとして用意
     $select_query = $select_db->prepare($select_sql);
+
+    $select_query->bindValue(':snsID',$snsID);
     //SQLを実行
     try{
         $select_query->execute();
@@ -31,20 +33,22 @@ function select_category(){
 }
 
 //kindテーブルの値を取得する関数
-function select_kind(){
-    //dbを確立
+function select_kind($snsID){
+
     $select_db = connect_MySQL();
-    //SQL文
-    $select_sql = "SELECT * FROM kind";
-    //クエリとして用意
+
+    $select_sql = "SELECT * FROM kind WHERE snsID=:snsID";
+
     $select_query = $select_db->prepare($select_sql);
-    //SQLを実行
+
+    $select_query->bindValue(':snsID',$snsID);
+
     try{
         $select_query->execute();
     }catch(PDOException $e){
         $select_query=null;
         return $e->getMessage();
     }
-    //レコードを連想配列として返却
+
     return $select_query->fetchAll(PDO::FETCH_ASSOC);
 }
