@@ -4,9 +4,9 @@ require_once '../common/scriptUtil.php';
 require_once '../common/dbaccesUtil.php';
 
 //categoryテーブルの値を取得
-$result_category = select_category();
+$result_category = select_category(ex_sns($_GET['sns']));
 //kindテーブルの値を取得
-$result_kind = select_kind();
+$result_kind = select_kind(ex_sns($_GET['sns']));
 ?>
 <!DOCTYPE html>
 <html lang="ja">
@@ -43,7 +43,7 @@ $result_kind = select_kind();
       ?>
 
       // チャートオプションの設定
-      var options = {'title':'Twitterの割合',
+      var options = {'title':'<?php if($_GET['sns'] == 'Google '){echo 'Google+';}else{echo $_GET['sns'];} ?>の割合',
                      'width':600,
                      'height':400};
 
@@ -54,7 +54,7 @@ $result_kind = select_kind();
   </script>
 </head>
   <body>
-    <h1><a href="<?php echo ROOT_URL ?>">SNS Photos</a></h1>
+    <h1><a href="<?php echo ROOT_URL; ?>">SNS Photos</a></h1>
     <h4>SNSに投稿されている画像の傾向分析サイト</h4><br>
     <!--円グラフの表示-->
     <div id="chart_div"></div>
@@ -68,7 +68,6 @@ $result_kind = select_kind();
             <tr>
               <td>種類</td>
               <td>割合</td>
-              <td>投稿数</td>
             </tr>
 
             <?php
@@ -77,8 +76,7 @@ $result_kind = select_kind();
                     ?>
                     <tr>
                       <td><?php echo $value_kind['kindName']; ?></td>
-                      <td><?php echo $value_kind['kindPercentage']; ?></td>
-                      <td><?php echo $value_kind['kindPostedNumber']; ?></td>
+                      <td><?php echo $value_kind['kindPercentage']; ?>％</td>
                     </tr>
                 <?php
                 }
