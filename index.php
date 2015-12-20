@@ -43,20 +43,21 @@ require_once '../common/scriptUtil.php';
   </script>
 </head>
   <body>
-    <h1><a href="<?php echo ROOT_URL ?>">SNS Photos</a></h1>
+    <!--ヘッダー-->
+    <h1><a href="<?php echo ROOT_URL; ?>">SNS Photos</a></h1>
     <h4>SNSに投稿されている画像の傾向分析サイト</h4><br>
     <!--円グラフの表示-->
     <div id="chart_div"></div>
     <form action="<?php echo SNS; ?>" method="POST">
       SNS<br><br>
-      <a href="<?php echo SNS; ?>">Twitter</a><br>
-      <a href="<?php echo SNS; ?>">Facebook</a><br>
-      <a href="<?php echo SNS; ?>">Google+</a><br><br><br>
+      <a href="<?php echo SNS; ?>?sns=Twitter">Twitter</a><br>
+      <a href="<?php echo SNS; ?>?sns=Facebook">Facebook</a><br>
+      <a href="<?php echo SNS; ?>?sns=Google+">Google+</a><br><br><br>
 
       カテゴリー<br><br>
-      <a href="<?php echo CATEGORY_DETAIL; ?>">動物</a><br>
-      <a href="<?php echo CATEGORY_DETAIL; ?>">風景</a><br>
-      <a href="<?php echo CATEGORY_DETAIL; ?>">料理</a><br><br><br>
+      <a href="<?php echo CATEGORY_DETAIL; ?>?category=動物">動物</a><br>
+      <a href="<?php echo CATEGORY_DETAIL; ?>?category=風景">風景</a><br>
+      <a href="<?php echo CATEGORY_DETAIL; ?>?category=料理">料理</a><br><br><br>
 
       サブサービス<br><br>
       サブサービス1<br>
@@ -64,7 +65,7 @@ require_once '../common/scriptUtil.php';
       サブサービス3<br><br>
     </form>
 
-    <!--トップページへのリンク-->
+    <!--フッター-->
     <?php echo return_top(); ?><br>
     <a href="<?php echo CONTACT; ?>">お問い合わせ</a>
   </body>
