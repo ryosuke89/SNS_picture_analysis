@@ -30,9 +30,9 @@ require_once 'api_dbaccesUtil.php';
     $snsID = 1;
 
     //処理の確認
-    $db = false;        //DBに追加する場合true
     $confirm = true;    //ツイートIDの確認の場合true
     $tweet_id = 676914; //確認したツイートIDを入力(上6桁)
+    $db = false;        //DBに追加する場合true
 
     //確認の場合と取得の場合の条件分岐
     if($confirm == true){
@@ -48,7 +48,7 @@ require_once 'api_dbaccesUtil.php';
     for($i = 0; $i < $repeat; $i++){
         //ツイート検索パラメータの設定
         $params = array(
-                        "q"=>"filter:images since:2015-12-15 until:2015-12-16", //検索キーワード
+                        "q"=>"filter:images since:2015-12-16 until:2015-12-17", //検索キーワード
                         "lang"=>"ja",             //言語コード
                         "count"=>50,              //取得件数（100件が上限）
                         "include_entities"=>true, //trueにすると添付URLについての情報を追加で取得できる
@@ -83,10 +83,10 @@ require_once 'api_dbaccesUtil.php';
                         //APIの日時に合わせる
                         date_default_timezone_set('Europe/London');
                         //投稿日時を取得
-                        $postedDate = date('Y-m-d H:i:s', strtotime($tweets_arr['statuses'][0]['created_at']));
+                        $postedDatetime = date('Y-m-d H:i:s', strtotime($tweets_arr['statuses'][0]['created_at']));
                         //DBに画像のURLと投稿日時を追加
                         if($db == true){
-                            $result = insert_photo($photoURL, $postedDate, $snsID);
+                            $result = insert_photo($photoURL, $postedDatetime, $snsID);
                         }
                     }
                 }
@@ -106,12 +106,13 @@ require_once 'api_dbaccesUtil.php';
 
         //エラーが発生しなければ表示
         if(!isset($result)){
+            echo $i + 1 . '回目<br>';
             if($db == true){
                 echo '画像のURLを' . $params['count'] * $request_number . '件取得しました。<br>';
             }else{
                 echo $params['count'] * $request_number . '件検索しました。<br>';
             }
-            echo '投稿日時：' . $postedDate . "<br>";
+            echo '投稿日時：' . $postedDatetime . "<br>";
             echo '次ページのツイートID：' . $params['max_id'] . "<br>" . "<br>";
         }
     }
