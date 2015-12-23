@@ -15,10 +15,8 @@ function connect_MySQL(){
 function insert_photo($photoURL, $postedDatetime, $snsID){
 
     $insert_db = connect_MySQL();
-
     $insert_sql = "INSERT INTO photo(photoURL,postedDatetime,snsID)"
             . "VALUES(:photoURL,:postedDatetime,:snsID)";
-
     $insert_query = $insert_db->prepare($insert_sql);
 
     $insert_query->bindValue(':photoURL',$photoURL);
@@ -52,4 +50,22 @@ function select_photo(){
 
     //該当するレコードを連想配列として返却
     return $select_query->fetchAll(PDO::FETCH_ASSOC);
+}
+
+//不要な画像のURLと投稿日時を削除する関数
+function delete_photo($photoID){
+
+    $delete_db = connect_MySQL();
+    $delete_sql = "DELETE FROM photo WHERE photoID=:photoID";
+    $delete_query = $delete_db->prepare($delete_sql);
+
+    $delete_query->bindValue(':photoID',$photoID);
+
+    try{
+        $delete_query->execute();
+    } catch (PDOException $e) {
+        $delete_query=null;
+        return $e->getMessage();
+    }
+    return null;
 }
