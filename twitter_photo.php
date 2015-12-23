@@ -1,6 +1,10 @@
 ﻿<?php
+//https://github.com/abraham/twitteroauthでダウンロード
+//TwitterOAuth.phpの「private function oAuthRequest(url,method, $parameters)」のprivateを削除
+//twitteroauthフォルダと同じ階層に置く
 require_once 'twitteroauth/autoload.php';
 require_once 'api_dbaccesUtil.php';
+use Abraham\TwitterOAuth\TwitterOAuth;
 ?>
 <!DOCTYPE html>
 <html lang="ja">
@@ -9,12 +13,6 @@ require_once 'api_dbaccesUtil.php';
 </head>
   <body>
     <?php
-    //TwitterOAuthを使う
-    //https://github.com/abraham/twitteroauth
-    //twitteroauthフォルダと同じ階層に置く
-    //TwitterOAuth.phpの「private function oAuthRequest(url,method, $parameters)」のprivateを削除
-    use Abraham\TwitterOAuth\TwitterOAuth;
-
     //設定
     $consumerKey = "カスタマーキー";
     $consumerSecret = "カスタマーシークレット";
@@ -31,35 +29,33 @@ require_once 'api_dbaccesUtil.php';
 
     //処理の確認
     $confirm = true;    //ツイートIDの確認の場合true
-    $tweet_id = 676914; //確認したツイートIDを入力(上6桁)
+    $tweet_id = 678001; //確認したツイートIDを入力(上6桁)
     $db = false;        //DBに追加する場合true
 
-    //確認の場合と取得の場合の条件分岐
+    //確認の場合と取得の場合で回数を変える
     if($confirm == true){
         $repeat = 1;
     }else{
         $repeat = 24;
     }
 
-    //初回のツイートID
-    $tweet_id = $tweet_id + 15;
-
     //約1時間ごとに取得を繰り返す
     for($i = 0; $i < $repeat; $i++){
         //ツイート検索パラメータの設定
         $params = array(
-                        "q"=>"filter:images since:2015-12-16 until:2015-12-17", //検索キーワード
+                        "q"=>"filter:images since:2015-12-19 until:2015-12-20", //検索キーワード
                         "lang"=>"ja",             //言語コード
                         "count"=>50,              //取得件数（100件が上限）
                         "include_entities"=>true, //trueにすると添付URLについての情報を追加で取得できる
                         "result_type"=>"recent",  //新着順に取得
         );
 
-        //2回目以降は約1時間前のツイートIDにする
-        $tweet_id = $tweet_id - 15;
+        //ツイートIDの指定を配列に追加
         if($confirm == false){
             $params += array("max_id"=>$tweet_id . "100000000000");
         }
+        //2回目以降は約1時間前のツイートIDにする
+        $tweet_id = $tweet_id - 15;
 
         //リクエスト回数
         $request_number = 1;
