@@ -10,8 +10,9 @@
     const CKey = 'クライアントシークレット';
     const TOKEN = 'アクセストークン';
 
-    //アクセストークンの取得確認
-    $token = true;  //trueの場合、アクセストークンを取得
+    //処理の確認
+    $token = false;  //trueの場合：アクセストークンを取得、falseの場合：画像認識を実行
+    $db = false;     //DBに追加する場合true
 
     if($token == true){
         //アクセストークンの取得処理
@@ -45,7 +46,7 @@
 
         //画像認識する範囲のphotoIDを入力
         $first = 101;
-        $last = 105;
+        $last = 102;
 
         //photoIDと配列番号を同じにする処理
         $first_array = $first - 1;
@@ -78,13 +79,50 @@
             curl_close($curl);
             $result_array = (json_decode($result, true));
 
-            echo "<br>" . "<br>";
-            $j = $i + 1;
+            $select = select_photo();
+            $snsID = $select[$i]['snsID'];
+            $photoID = $select[$i]['photoID'];
+            $id = $i + 1;
 
-            //結果の表示
-            echo 'photoID=' . $j . 'の結果<br>';
-            var_dump($result_array['results'][0]['result']['tag']['classes']);
-            var_dump($result_array['results'][0]['result']['tag']['probs']);
+            //DBに画像認識の結果を追加
+            if($db == true){
+                $insert_result = insert_recognition(
+                                                    $result_array['results'][0]['result']['tag']['classes'][0],
+                                                    $result_array['results'][0]['result']['tag']['classes'][1],
+                                                    $result_array['results'][0]['result']['tag']['classes'][2],
+                                                    $result_array['results'][0]['result']['tag']['classes'][3],
+                                                    $result_array['results'][0]['result']['tag']['classes'][4],
+                                                    $result_array['results'][0]['result']['tag']['classes'][5],
+                                                    $result_array['results'][0]['result']['tag']['classes'][6],
+                                                    $result_array['results'][0]['result']['tag']['classes'][7],
+                                                    $result_array['results'][0]['result']['tag']['classes'][8],
+                                                    $result_array['results'][0]['result']['tag']['classes'][9],
+                                                    $result_array['results'][0]['result']['tag']['classes'][10],
+                                                    $result_array['results'][0]['result']['tag']['classes'][11],
+                                                    $result_array['results'][0]['result']['tag']['classes'][12],
+                                                    $result_array['results'][0]['result']['tag']['classes'][13],
+                                                    $result_array['results'][0]['result']['tag']['classes'][14],
+                                                    $result_array['results'][0]['result']['tag']['classes'][15],
+                                                    $result_array['results'][0]['result']['tag']['classes'][16],
+                                                    $result_array['results'][0]['result']['tag']['classes'][17],
+                                                    $result_array['results'][0]['result']['tag']['classes'][18],
+                                                    $result_array['results'][0]['result']['tag']['classes'][19],
+                                                    $snsID,
+                                                    $photoID
+                );
+            }
+
+            //エラーが発生しなければ画像認識の結果を表示
+            if(!isset($insert_result)){
+                if($db == true){
+                    echo 'photoID=' . $id . 'の結果を取得しました。<br>';
+                }else{
+                    echo 'photoID=' . $id . 'の結果<br>';
+                }
+                var_dump($result_array['results'][0]['result']['tag']['classes']);
+                var_dump($result_array['results'][0]['result']['tag']['probs']);
+                echo "<br>" . "<br>";
+            }
         }
     }
     ?>
