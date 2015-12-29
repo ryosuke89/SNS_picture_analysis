@@ -91,7 +91,7 @@
             $photoID = $photo_array[$id]['photoID'];
 
             //DBに画像認識の結果を追加
-            if($db == true){
+            if($db == true && !empty($result_array['results'][$j]['result']['tag']['classes'][0])){
                 $insert_result = insert_recognition(
                                                     $result_array['results'][$j]['result']['tag']['classes'][0],
                                                     $result_array['results'][$j]['result']['tag']['classes'][1],
