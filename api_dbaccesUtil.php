@@ -89,12 +89,34 @@ function insert_recognition($result1, $result2, $result3, $result4, $result5,
 function insert_list($listName, $listKind){
 
     $insert_db = connect_MySQL();
-    $insert_sql = "INSERT INTO list(listName,listKind)"
-                      . "VALUES(:listName,:listKind)";
+    $insert_sql = "INSERT INTO list(listName,listKind) VALUES(:listName,:listKind)";
     $insert_query = $insert_db->prepare($insert_sql);
 
     $insert_query->bindValue(':listName',$listName);
     $insert_query->bindValue(':listKind',$listKind);
+
+    try{
+        $insert_query->execute();
+    } catch (PDOException $e) {
+        $insert_db=null;
+        return $e->getMessage();
+    }
+
+    $insert_db=null;
+    return null;
+}
+
+//認識結果1を種類名に変換してDBに追加する関数
+function insert_count($countName, $snsID, $photoID){
+
+    $insert_db = connect_MySQL();
+    $insert_sql = "INSERT INTO count_num(countName,snsID,photoID)"
+                      . "VALUES(:countName,:snsID,:photoID)";
+    $insert_query = $insert_db->prepare($insert_sql);
+
+    $insert_query->bindValue(':countName',$countName);
+    $insert_query->bindValue(':snsID',$snsID);
+    $insert_query->bindValue(':photoID',$photoID);
 
     try{
         $insert_query->execute();
