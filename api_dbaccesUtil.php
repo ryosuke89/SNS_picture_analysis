@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 
 //DBへの接続
 function connect_MySQL(){
@@ -86,14 +86,16 @@ function insert_recognition($result1, $result2, $result3, $result4, $result5,
 }
 
 //リストをDBに追加する関数
-function insert_list($listName, $listKind){
+function insert_list($listName, $listKind, $listCategory){
 
     $insert_db = connect_MySQL();
-    $insert_sql = "INSERT INTO list(listName,listKind) VALUES(:listName,:listKind)";
+    $insert_sql = "INSERT INTO list(listName,listKind,listCategory)"
+                      . "VALUES(:listName,:listKind,:listCategory)";
     $insert_query = $insert_db->prepare($insert_sql);
 
     $insert_query->bindValue(':listName',$listName);
     $insert_query->bindValue(':listKind',$listKind);
+    $insert_query->bindValue(':listCategory',$listCategory);
 
     try{
         $insert_query->execute();
@@ -107,14 +109,15 @@ function insert_list($listName, $listKind){
 }
 
 //認識結果1を種類名に変換してDBに追加する関数
-function insert_count($countName, $snsID, $photoID){
+function insert_calc($calcKind, $calcCategory, $snsID, $photoID){
 
     $insert_db = connect_MySQL();
-    $insert_sql = "INSERT INTO count_num(countName,snsID,photoID)"
-                      . "VALUES(:countName,:snsID,:photoID)";
+    $insert_sql = "INSERT INTO calc(calcKind,calcCategory,snsID,photoID)"
+                      . "VALUES(:calcKind,:calcCategory,:snsID,:photoID)";
     $insert_query = $insert_db->prepare($insert_sql);
 
-    $insert_query->bindValue(':countName',$countName);
+    $insert_query->bindValue(':calcKind',$calcKind);
+    $insert_query->bindValue(':calcCategory',$calcCategory);
     $insert_query->bindValue(':snsID',$snsID);
     $insert_query->bindValue(':photoID',$photoID);
 
@@ -165,24 +168,6 @@ function select_recognition(){
     return $select_query->fetchAll(PDO::FETCH_ASSOC);
 }
 
-//画像認識の結果を重複を除いて表示する関数
-function group_by_recognition(){
-
-    $select_db = connect_MySQL();
-    $select_sql = "SELECT * FROM recognition GROUP BY result1";
-    $select_query = $select_db->prepare($select_sql);
-
-    try{
-        $select_query->execute();
-    } catch (PDOException $e) {
-        $select_query=null;
-        return $e->getMessage();
-    }
-
-    //該当するレコードを連想配列として返却
-    return $select_query->fetchAll(PDO::FETCH_ASSOC);
-}
-
 //リストを表示する関数
 function select_list(){
 
@@ -201,7 +186,117 @@ function select_list(){
     return $select_query->fetchAll(PDO::FETCH_ASSOC);
 }
 
-//不要な画像のURLを削除する関数
+//認識結果1を変換した種類名を表示する関数
+function select_calc(){
+
+    $select_db = connect_MySQL();
+    $select_sql = "SELECT * FROM calc";
+    $select_query = $select_db->prepare($select_sql);
+
+    try{
+        $select_query->execute();
+    } catch (PDOException $e) {
+        $select_query=null;
+        return $e->getMessage();
+    }
+
+    //該当するレコードを連想配列として返却
+    return $select_query->fetchAll(PDO::FETCH_ASSOC);
+}
+
+//画像認識の結果を重複を除いて表示する関数
+function group_by_recognition(){
+
+    $select_db = connect_MySQL();
+    $select_sql = "SELECT * FROM recognition GROUP BY result1";
+    $select_query = $select_db->prepare($select_sql);
+
+    try{
+        $select_query->execute();
+    } catch (PDOException $e) {
+        $select_query=null;
+        return $e->getMessage();
+    }
+
+    //該当するレコードを連想配列として返却
+    return $select_query->fetchAll(PDO::FETCH_ASSOC);
+}
+
+//種類ごとの数を取得する関数
+function kind_calc($snsID){
+
+    $select_db = connect_MySQL();
+    $select_sql = "SELECT calcKind, count(calcKind), snsID, calcCategory FROM calc";
+    //snsIDを指定した場合、SQL文に追加
+    if($snsID != 0){
+        $select_sql .= " WHERE snsID=:snsID";
+    }
+    $select_sql .= " GROUP BY calcKind";
+    $select_query = $select_db->prepare($select_sql);
+
+    $select_query->bindValue(':snsID',$snsID);
+
+    try{
+        $select_query->execute();
+    } catch (PDOException $e) {
+        $select_query=null;
+        return $e->getMessage();
+    }
+
+    //該当するレコードを連想配列として返却
+    return $select_query->fetchAll(PDO::FETCH_ASSOC);
+}
+
+//カテゴリーごとの数を取得する関数
+function category_calc($snsID){
+
+    $select_db = connect_MySQL();
+    $select_sql = "SELECT calcCategory, count(calcCategory), snsID FROM calc";
+    //snsIDを指定した場合、SQL文に追加
+    if($snsID != 0){
+        $select_sql .= " WHERE snsID=:snsID";
+    }
+    $select_sql .= " GROUP BY calcCategory";
+    $select_query = $select_db->prepare($select_sql);
+
+    $select_query->bindValue(':snsID',$snsID);
+
+    try{
+        $select_query->execute();
+    } catch (PDOException $e) {
+        $select_query=null;
+        return $e->getMessage();
+    }
+
+    //該当するレコードを連想配列として返却
+    return $select_query->fetchAll(PDO::FETCH_ASSOC);
+}
+
+//レコード件数を取得する関数
+function count_calc($snsID){
+
+    $select_db = connect_MySQL();
+    $select_sql = "SELECT count(*) FROM calc";
+    //snsIDを指定した場合、SQL文に追加
+    if($snsID != 0){
+        $select_sql .= " WHERE snsID=:snsID";
+    }
+    $select_query = $select_db->prepare($select_sql);
+
+    $select_query->bindValue(':snsID',$snsID);
+
+    try{
+        $select_query->execute();
+    } catch (PDOException $e) {
+        $select_query=null;
+        return $e->getMessage();
+    }
+
+    //該当するレコードを連想配列として返却
+    return $select_query->fetchAll(PDO::FETCH_ASSOC);
+}
+
+//画像のURLを削除する関数
 function delete_photo($photoID){
 
     $delete_db = connect_MySQL();
@@ -219,7 +314,25 @@ function delete_photo($photoID){
     return null;
 }
 
-//不要なリストを削除する関数
+//画像認識の結果を削除する関数
+function delete_recognition($recognitionID){
+
+    $delete_db = connect_MySQL();
+    $delete_sql = "DELETE FROM recognition WHERE recognitionID=:recognitionID";
+    $delete_query = $delete_db->prepare($delete_sql);
+
+    $delete_query->bindValue(':recognitionID',$recognitionID);
+
+    try{
+        $delete_query->execute();
+    } catch (PDOException $e) {
+        $delete_query=null;
+        return $e->getMessage();
+    }
+    return null;
+}
+
+//リストを削除する関数
 function delete_list($listID){
 
     $delete_db = connect_MySQL();
@@ -227,6 +340,24 @@ function delete_list($listID){
     $delete_query = $delete_db->prepare($delete_sql);
 
     $delete_query->bindValue(':listID',$listID);
+
+    try{
+        $delete_query->execute();
+    } catch (PDOException $e) {
+        $delete_query=null;
+        return $e->getMessage();
+    }
+    return null;
+}
+
+//認識結果1を変換した種類名を削除する関数
+function delete_calc($calcID){
+
+    $delete_db = connect_MySQL();
+    $delete_sql = "DELETE FROM calc WHERE calcID=:calcID";
+    $delete_query = $delete_db->prepare($delete_sql);
+
+    $delete_query->bindValue(':calcID',$calcID);
 
     try{
         $delete_query->execute();
