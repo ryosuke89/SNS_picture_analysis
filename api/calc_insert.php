@@ -22,7 +22,7 @@
     //リストの取得
     $select_list = select_list();
 
-    //リストを利用して認識結果1を種類名に変換し、DBに追加
+    //リストを利用して認識結果1を種類名、カテゴリー名に変換し、DBに追加
     if($db == true){
         for($i = $first_array; $i <= $last_array; $i++){
             foreach($select_list as $value_list){
