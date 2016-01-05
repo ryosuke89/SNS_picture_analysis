@@ -11,8 +11,8 @@
     $recognition = false; //trueの場合：recognitionテーブルを削除
     $list = false;        //trueの場合：listテーブルを削除
     $calc = false;        //trueの場合：calcテーブルを削除
-    $category = false;    //trueの場合：categoryテーブルを削除(kindテーブル削除後)
     $kind = false;        //trueの場合：kindテーブルを削除
+    $category = false;    //trueの場合：categoryテーブルを削除(kindテーブル削除後)
 
     //削除する範囲のphotoIDを入力
     $first_photo = 0;
@@ -30,13 +30,13 @@
     $first_calc = 0;
     $last_calc = 0;
 
-    //削除する範囲のcategoryIDを入力
-    $first_category = 0;
-    $last_category = 0;
-
     //削除する範囲のkindIDを入力
     $first_kind = 0;
     $last_kind = 0;
+
+    //削除する範囲のcategoryIDを入力
+    $first_category = 0;
+    $last_category = 0;
 
     //画像のURLを削除
     if($photo == true){
@@ -45,7 +45,7 @@
             $first_photo = $first_photo + 1;
         }
         if(!isset($result_photo)){
-            echo '画像のURLを削除しました。';
+            echo '画像のURLを削除しました。<br>';
         }
     }
 
@@ -56,7 +56,7 @@
             $first_recognition = $first_recognition + 1;
         }
         if(!isset($result_recognition)){
-            echo '画像認識の結果を削除しました。';
+            echo '画像認識の結果を削除しました。<br>';
         }
     }
 
@@ -67,7 +67,7 @@
             $first_list = $first_list + 1;
         }
         if(!isset($result_list)){
-            echo 'リストを削除しました。';
+            echo 'リストを削除しました。<br>';
         }
     }
 
@@ -78,7 +78,18 @@
             $first_calc = $first_calc + 1;
         }
         if(!isset($result_calc)){
-            echo '種類名、カテゴリー名を削除しました。';
+            echo '種類名、カテゴリー名を削除しました。<br>';
+        }
+    }
+
+    //種類の集計結果を削除
+    if($kind == true){
+        for($i = $first_kind; $i <= $last_kind; $i++){
+            $result_kind = delete_kind($first_kind);
+            $first_kind = $first_kind + 1;
+        }
+        if(!isset($result_kind)){
+            echo '種類の集計結果を削除しました。<br>';
         }
     }
 
@@ -90,17 +101,6 @@
         }
         if(!isset($result_category)){
             echo 'カテゴリーの集計結果を削除しました。';
-        }
-    }
-
-    //種類の集計結果を削除
-    if($kind == true){
-        for($i = $first_kind; $i <= $last_kind; $i++){
-            $result_kind = delete_kind($first_kind);
-            $first_kind = $first_kind + 1;
-        }
-        if(!isset($result_kind)){
-            echo '種類の集計結果を削除しました。';
         }
     }
     ?>
