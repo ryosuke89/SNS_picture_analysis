@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
 //DBへの接続
 function connect_MySQL(){
@@ -132,6 +132,55 @@ function insert_calc($calcKind, $calcCategory, $snsID, $photoID){
     return null;
 }
 
+//カテゴリーの集計結果をDBに追加する関数
+function insert_category($categoryID, $categoryName, $categoryPercentage, $snsID){
+
+    $insert_db = connect_MySQL();
+    $insert_sql = "INSERT INTO category(categoryID,categoryName,categoryPercentage,snsID)"
+                      . "VALUES(:categoryID,:categoryName,:categoryPercentage,:snsID)";
+    $insert_query = $insert_db->prepare($insert_sql);
+
+    $insert_query->bindValue(':categoryID',$categoryID);
+    $insert_query->bindValue(':categoryName',$categoryName);
+    $insert_query->bindValue(':categoryPercentage',$categoryPercentage);
+    $insert_query->bindValue(':snsID',$snsID);
+
+    try{
+        $insert_query->execute();
+    } catch (PDOException $e) {
+        $insert_db=null;
+        return $e->getMessage();
+    }
+
+    $insert_db=null;
+    return null;
+}
+
+//種類の集計結果をDBに追加する関数
+function insert_kind($kindID, $kindName, $kindPercentage, $snsID, $categoryID){
+
+    $insert_db = connect_MySQL();
+    $insert_sql = "INSERT INTO kind(kindID,kindName,kindPercentage,snsID,categoryID)"
+                      . "VALUES(:kindID,:kindName,:kindPercentage,:snsID,:categoryID)";
+    $insert_query = $insert_db->prepare($insert_sql);
+
+    $insert_query->bindValue(':kindID',$kindID);
+    $insert_query->bindValue(':kindName',$kindName);
+    $insert_query->bindValue(':kindPercentage',$kindPercentage);
+    $insert_query->bindValue(':snsID',$snsID);
+    $insert_query->bindValue(':categoryID',$categoryID);
+
+    try{
+        $insert_query->execute();
+    } catch (PDOException $e) {
+        $insert_db=null;
+        return $e->getMessage();
+    }
+
+    $insert_db=null;
+    return null;
+}
+
 //画像のURLを表示する関数
 function select_photo(){
 
@@ -186,11 +235,47 @@ function select_list(){
     return $select_query->fetchAll(PDO::FETCH_ASSOC);
 }
 
-//認識結果1を変換した種類名を表示する関数
+//認識結果1を変換した種類名、カテゴリー名を表示する関数
 function select_calc(){
 
     $select_db = connect_MySQL();
     $select_sql = "SELECT * FROM calc";
+    $select_query = $select_db->prepare($select_sql);
+
+    try{
+        $select_query->execute();
+    } catch (PDOException $e) {
+        $select_query=null;
+        return $e->getMessage();
+    }
+
+    //該当するレコードを連想配列として返却
+    return $select_query->fetchAll(PDO::FETCH_ASSOC);
+}
+
+//カテゴリーの集計結果を表示する関数
+function select_category(){
+
+    $select_db = connect_MySQL();
+    $select_sql = "SELECT * FROM category";
+    $select_query = $select_db->prepare($select_sql);
+
+    try{
+        $select_query->execute();
+    } catch (PDOException $e) {
+        $select_query=null;
+        return $e->getMessage();
+    }
+
+    //該当するレコードを連想配列として返却
+    return $select_query->fetchAll(PDO::FETCH_ASSOC);
+}
+
+//種類の集計結果を表示する関数
+function select_kind(){
+
+    $select_db = connect_MySQL();
+    $select_sql = "SELECT * FROM kind";
     $select_query = $select_db->prepare($select_sql);
 
     try{
@@ -350,7 +435,7 @@ function delete_list($listID){
     return null;
 }
 
-//認識結果1を変換した種類名を削除する関数
+//認識結果1を変換した種類名、カテゴリー名を削除する関数
 function delete_calc($calcID){
 
     $delete_db = connect_MySQL();
@@ -358,6 +443,42 @@ function delete_calc($calcID){
     $delete_query = $delete_db->prepare($delete_sql);
 
     $delete_query->bindValue(':calcID',$calcID);
+
+    try{
+        $delete_query->execute();
+    } catch (PDOException $e) {
+        $delete_query=null;
+        return $e->getMessage();
+    }
+    return null;
+}
+
+//カテゴリーの集計結果を削除する関数
+function delete_category($categoryID){
+
+    $delete_db = connect_MySQL();
+    $delete_sql = "DELETE FROM category WHERE categoryID=:categoryID";
+    $delete_query = $delete_db->prepare($delete_sql);
+
+    $delete_query->bindValue(':categoryID',$categoryID);
+
+    try{
+        $delete_query->execute();
+    } catch (PDOException $e) {
+        $delete_query=null;
+        return $e->getMessage();
+    }
+    return null;
+}
+
+//種類の集計結果を削除する関数
+function delete_kind($kindID){
+
+    $delete_db = connect_MySQL();
+    $delete_sql = "DELETE FROM kind WHERE kindID=:kindID";
+    $delete_query = $delete_db->prepare($delete_sql);
+
+    $delete_query->bindValue(':kindID',$kindID);
 
     try{
         $delete_query->execute();
