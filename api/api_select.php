@@ -11,6 +11,8 @@
     $recognition = false; //trueの場合：recognitionテーブルを表示
     $list = false;        //trueの場合：listテーブルを表示
     $calc = false;        //trueの場合：calcテーブルを表示
+    $category = false;    //trueの場合：categoryテーブルを表示
+    $kind = false;        //trueの場合：kindテーブルを表示
 
     //画像のURLを表示
     if($photo == true){
@@ -160,6 +162,66 @@
                 <td><?php echo $result_calc['calcCategory']; ?></td>
                 <td><?php echo $result_calc['snsID']; ?></td>
                 <td><?php echo $result_calc['photoID']; ?></td>
+              </tr>
+              <?php
+          }
+          ?>
+        </table>
+        <?php
+    }
+
+    //カテゴリーの集計結果を表示
+    if($category == true){
+        ?>
+        <table border=1>
+          <tr>
+            <th>カテゴリーの番号</th>
+            <th>カテゴリー名</th>
+            <th>カテゴリーの割合</th>
+            <th>SNSの番号</th>
+          </tr>
+
+          <?php
+          $result_category = select_category();
+
+          foreach($result_category as $result_category){
+              ?>
+              <tr>
+                <td><?php echo $result_category['categoryID']; ?></td>
+                <td><?php echo $result_category['categoryName']; ?></td>
+                <td><?php echo $result_category['categoryPercentage']; ?></td>
+                <td><?php echo $result_category['snsID']; ?></td>
+              </tr>
+              <?php
+          }
+          ?>
+        </table>
+        <?php
+    }
+
+    //種類の集計結果を表示
+    if($kind == true){
+        ?>
+        <table border=1>
+          <tr>
+            <th>種類の番号</th>
+            <th>種類名</th>
+            <th>種類の割合</th>
+            <th>SNSの番号</th>
+            <th>カテゴリーの番号</th>
+          </tr>
+
+          <?php
+          $result_kind = select_kind();
+
+          foreach($result_kind as $result_kind){
+              ?>
+              <tr>
+                <td><?php echo $result_kind['kindID']; ?></td>
+                <td><?php echo $result_kind['kindName']; ?></td>
+                <td><?php echo $result_kind['kindPercentage']; ?></td>
+                <td><?php echo $result_kind['snsID']; ?></td>
+                <td><?php echo $result_kind['categoryID']; ?></td>
               </tr>
               <?php
           }
