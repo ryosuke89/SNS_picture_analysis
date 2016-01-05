@@ -7,8 +7,7 @@
   <body>
     <?php
     //カテゴリーテーブル、種類テーブルにレコードがないことを確認する
-    $db_category = true; //trueの場合：カテゴリーの集計結果をDBに追加
-    $db_kind = true;     //trueの場合：種類の集計結果をDBに追加
+    $db = true; //trueの場合：集計結果をDBに追加
     //SNSの番号を入力
     $snsID = 0; //0の場合：全てのSNS
 
@@ -44,12 +43,12 @@
           </tr>
           <?php
           //カテゴリーの集計結果をDBに追加
-          if($db_category == true){
+          if($db == true){
               $insert_category = insert_category($categoryID, $categoryName, $categoryPercentage, $category_snsID);
           }
       }
       //エラーが発生しなければ表示
-      if(!isset($insert_category) && $db_category == true){
+      if(!isset($insert_category) && $db == true){
           echo 'カテゴリーの集計結果をDBに追加しました。<br> . <br>';
       }else{
           echo 'カテゴリーの集計結果<br> . <br>';
@@ -90,12 +89,12 @@
           </tr>
           <?php
           //種類の集計結果をDBに追加
-          if($db_kind == true){
+          if($db == true){
               $insert_kind = insert_kind($kindID, $kindName, $kindPercentage, $kind_snsID, $kind_categoryID);
           }
       }
       //エラーが発生しなければ表示
-      if(!isset($insert_kind) && $db_kind == true){
+      if(!isset($insert_kind) && $db == true){
           echo '種類の集計結果をDBに追加しました。<br> . <br>';
       }else{
           echo '種類の集計結果<br> . <br>';
