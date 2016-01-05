@@ -1,4 +1,4 @@
-<?php require_once 'api_dbaccesUtil.php'; ?>
+<?php require_once '../common/api_dbaccesUtil.php'; ?>
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -15,6 +15,7 @@
       <tr>
         <th>リストの名前</th>
         <th>種類名</th>
+        <th>カテゴリー名</th>
       </tr>
 
       <?php
@@ -25,7 +26,8 @@
             <tr>
               <td><input type="text" name="listName" value="<?php echo $value_recognition['result1']; ?>"></td>
               <td><input type="text" name="listKind" value="<?php foreach($select_list as $value_list){if($value_recognition['result1'] == $value_list['listName']){echo $value_list['listKind'];}} ?>"></td>
-              <td><input type="submit" name="btnSubmit"></td>
+              <td><input type="text" name="listCategory" value="<?php foreach($select_list as $value_list){if($value_recognition['result1'] == $value_list['listName']){echo $value_list['listCategory'];}} ?>"></td>
+              <td><input type="submit" name="btnSubmit" style="width:40px" <?php foreach($select_list as $value_list){if($value_recognition['result1'] == $value_list['listName']){ ?>value=""<?php }} ?>></td>
             </tr>
           </form>
           <?php
@@ -46,9 +48,15 @@
         $listKind = $_POST['listKind'];
     }
 
+    if(empty($_POST['listCategory'])){
+        $listCategory = null;
+    }else{
+        $listCategory = $_POST['listCategory'];
+    }
+
     //リストをDBに追加
-    if(!empty($listName) && !empty($listKind)){
-        $insert_result = insert_list($listName, $listKind);
+    if(!empty($listName) && !empty($listKind) && !empty($listCategory)){
+        $insert_result = insert_list($listName, $listKind, $listCategory);
     }
     ?>
   </body>
