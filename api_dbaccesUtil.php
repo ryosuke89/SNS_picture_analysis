@@ -133,14 +133,13 @@ function insert_calc($calcKind, $calcCategory, $snsID, $photoID){
 }
 
 //カテゴリーの集計結果をDBに追加する関数
-function insert_category($categoryID, $categoryName, $categoryPercentage, $snsID){
+function insert_category($categoryName, $categoryPercentage, $snsID){
 
     $insert_db = connect_MySQL();
-    $insert_sql = "INSERT INTO category(categoryID,categoryName,categoryPercentage,snsID)"
-                      . "VALUES(:categoryID,:categoryName,:categoryPercentage,:snsID)";
+    $insert_sql = "INSERT INTO category(categoryName,categoryPercentage,snsID)"
+                      . "VALUES(:categoryName,:categoryPercentage,:snsID)";
     $insert_query = $insert_db->prepare($insert_sql);
 
-    $insert_query->bindValue(':categoryID',$categoryID);
     $insert_query->bindValue(':categoryName',$categoryName);
     $insert_query->bindValue(':categoryPercentage',$categoryPercentage);
     $insert_query->bindValue(':snsID',$snsID);
@@ -157,14 +156,13 @@ function insert_category($categoryID, $categoryName, $categoryPercentage, $snsID
 }
 
 //種類の集計結果をDBに追加する関数
-function insert_kind($kindID, $kindName, $kindPercentage, $snsID, $categoryID){
+function insert_kind($kindName, $kindPercentage, $snsID, $categoryID){
 
     $insert_db = connect_MySQL();
-    $insert_sql = "INSERT INTO kind(kindID,kindName,kindPercentage,snsID,categoryID)"
-                      . "VALUES(:kindID,:kindName,:kindPercentage,:snsID,:categoryID)";
+    $insert_sql = "INSERT INTO kind(kindName,kindPercentage,snsID,categoryID)"
+                      . "VALUES(:kindName,:kindPercentage,:snsID,:categoryID)";
     $insert_query = $insert_db->prepare($insert_sql);
 
-    $insert_query->bindValue(':kindID',$kindID);
     $insert_query->bindValue(':kindName',$kindName);
     $insert_query->bindValue(':kindPercentage',$kindPercentage);
     $insert_query->bindValue(':snsID',$snsID);
@@ -213,7 +211,6 @@ function select_recognition(){
         return $e->getMessage();
     }
 
-    //該当するレコードを連想配列として返却
     return $select_query->fetchAll(PDO::FETCH_ASSOC);
 }
 
@@ -231,7 +228,6 @@ function select_list(){
         return $e->getMessage();
     }
 
-    //該当するレコードを連想配列として返却
     return $select_query->fetchAll(PDO::FETCH_ASSOC);
 }
 
@@ -249,7 +245,6 @@ function select_calc(){
         return $e->getMessage();
     }
 
-    //該当するレコードを連想配列として返却
     return $select_query->fetchAll(PDO::FETCH_ASSOC);
 }
 
@@ -267,7 +262,6 @@ function select_category(){
         return $e->getMessage();
     }
 
-    //該当するレコードを連想配列として返却
     return $select_query->fetchAll(PDO::FETCH_ASSOC);
 }
 
@@ -285,7 +279,6 @@ function select_kind(){
         return $e->getMessage();
     }
 
-    //該当するレコードを連想配列として返却
     return $select_query->fetchAll(PDO::FETCH_ASSOC);
 }
 
@@ -303,36 +296,10 @@ function group_by_recognition(){
         return $e->getMessage();
     }
 
-    //該当するレコードを連想配列として返却
     return $select_query->fetchAll(PDO::FETCH_ASSOC);
 }
 
-//種類ごとの数を取得する関数
-function kind_calc($snsID){
-
-    $select_db = connect_MySQL();
-    $select_sql = "SELECT calcKind, count(calcKind), snsID, calcCategory FROM calc";
-    //snsIDを指定した場合、SQL文に追加
-    if($snsID != 0){
-        $select_sql .= " WHERE snsID=:snsID";
-    }
-    $select_sql .= " GROUP BY calcKind";
-    $select_query = $select_db->prepare($select_sql);
-
-    $select_query->bindValue(':snsID',$snsID);
-
-    try{
-        $select_query->execute();
-    } catch (PDOException $e) {
-        $select_query=null;
-        return $e->getMessage();
-    }
-
-    //該当するレコードを連想配列として返却
-    return $select_query->fetchAll(PDO::FETCH_ASSOC);
-}
-
-//カテゴリーごとの数を取得する関数
+//カテゴリーごとの件数を取得する関数
 function category_calc($snsID){
 
     $select_db = connect_MySQL();
@@ -353,12 +320,11 @@ function category_calc($snsID){
         return $e->getMessage();
     }
 
-    //該当するレコードを連想配列として返却
     return $select_query->fetchAll(PDO::FETCH_ASSOC);
 }
 
 //レコード件数を取得する関数
-function count_calc($snsID){
+function count_all_calc($snsID){
 
     $select_db = connect_MySQL();
     $select_sql = "SELECT count(*) FROM calc";
@@ -377,7 +343,60 @@ function count_calc($snsID){
         return $e->getMessage();
     }
 
-    //該当するレコードを連想配列として返却
+    return $select_query->fetchAll(PDO::FETCH_ASSOC);
+}
+
+//種類ごとの件数を取得する関数
+function kind_calc($snsID, $calcCategory){
+
+    $select_db = connect_MySQL();
+    $select_sql = "SELECT calcKind, count(calcKind), snsID, calcCategory FROM calc WHERE calcCategory=:calcCategory";
+    //snsIDを指定した場合、SQL文に追加
+    if($snsID != 0){
+        $select_sql .= " AND snsID=:snsID";
+    }
+    $select_sql .= " GROUP BY calcKind";
+    $select_query = $select_db->prepare($select_sql);
+
+    if($snsID != 0){
+        $select_query->bindValue(':snsID',$snsID);
+    }
+    $select_query->bindValue(':calcCategory',$calcCategory);
+
+    try{
+        $select_query->execute();
+    } catch (PDOException $e) {
+        $select_query=null;
+        return $e->getMessage();
+    }
+
+    return $select_query->fetchAll(PDO::FETCH_ASSOC);
+}
+
+//カテゴリーごとのレコード件数を取得する関数
+function count_category_calc($snsID, $calcCategory){
+
+    $select_db = connect_MySQL();
+    $select_sql = "SELECT count(*) FROM calc WHERE calcCategory=:calcCategory";
+    //snsIDを指定した場合、SQL文に追加
+    if($snsID != 0){
+        $select_sql .= " AND snsID=:snsID";
+    }
+    $select_sql .= " GROUP BY calcCategory";
+    $select_query = $select_db->prepare($select_sql);
+
+    if($snsID != 0){
+        $select_query->bindValue(':snsID',$snsID);
+    }
+    $select_query->bindValue(':calcCategory',$calcCategory);
+
+    try{
+        $select_query->execute();
+    } catch (PDOException $e) {
+        $select_query=null;
+        return $e->getMessage();
+    }
+
     return $select_query->fetchAll(PDO::FETCH_ASSOC);
 }
 
