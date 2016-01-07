@@ -80,6 +80,18 @@ $result_kind = select_sns_kind(ex_sns($_GET['sns']));
                     <?php
                 }
             }
+            //カテゴリーごとの画像の番号を取得
+            $result_photoID = photoID_calc(ex_sns($_GET['sns']), $value_category['categoryName']);
+            //カテゴリーごとの画像のURLを取得
+            foreach($result_photoID as $value_photoID){
+                $result_url = url_photo($value_photoID['photoID']);
+                //画像の表示
+                foreach($result_url as $value_url){
+                    ?>
+                    <img src="<?php echo $value_url['photoURL']; ?>" width="80" height="80"/>
+                    <?php
+                }
+            }
             ?>
           </table><br>
           <?php
