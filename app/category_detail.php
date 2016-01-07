@@ -74,6 +74,28 @@ $result_kind = select_detail_kind($result_category[0]['categoryID']);
             </tr>
             <?php
         }
+
+        //snsIDの取得
+        if(empty($_GET['sns'])){
+            $snsID = null;
+        }else{
+            $snsID = ex_sns($_GET['sns']);
+        }
+
+        foreach($result_category as $value_category){
+            //カテゴリーごとの画像の番号を取得
+            $result_photoID = photoID_calc($snsID, $value_category['categoryName']);
+            //カテゴリーごとの画像のURLを取得
+            foreach($result_photoID as $value_photoID){
+                $result_url = url_photo($value_photoID['photoID']);
+                //画像の表示
+                foreach($result_url as $value_url){
+                    ?>
+                    <img src="<?php echo $value_url['photoURL']; ?>" width="80" height="80"/>
+                    <?php
+                }
+            }
+        }
         ?>
       </table><br>
     </form>
