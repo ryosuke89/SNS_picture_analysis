@@ -4,9 +4,9 @@ require_once '../common/scriptUtil.php';
 require_once '../common/dbaccesUtil.php';
 
 //categoryテーブルの値を取得
-$result_category = select_name_category($_GET['category']);
-//kindテーブルの値を取得
-$result_kind = select_name_kind($result_category[0]['categoryID']);
+$result_category = select_detail_category($_GET['category']);
+//kindテーブルの値を割合が高い順に取得
+$result_kind = select_detail_kind($result_category[0]['categoryID']);
 ?>
 <!DOCTYPE html>
 <html lang="ja">
@@ -43,7 +43,7 @@ $result_kind = select_name_kind($result_category[0]['categoryID']);
       ?>
 
       // チャートオプションの設定
-      var options = {'title':'<?php echo $_GET['category']; ?>の割合',
+      var options = {'title':'<?php if(empty($_GET['sns'])){echo 'Twitterでの' . $_GET['category']; }else{echo $_GET['sns'] . 'での' . $_GET['category']; } ?>の割合',
                      'width':600,
                      'height':400};
 
@@ -59,29 +59,23 @@ $result_kind = select_name_kind($result_category[0]['categoryID']);
     <!--円グラフの表示-->
     <div id="chart_div"></div>
     <form action="<?php echo SNS; ?>" method="POST">
-      <?php
-      //カテゴリーごとの種類の割合をテーブル型で表示
-      foreach($result_category as $value_category){
-          ?>
-          <table border=1>
+      <table border=1>
+        <tr>
+          <td>種類</td>
+          <td>割合</td>
+        </tr>
+        <?php
+        //種類の割合をテーブル型で表示
+        foreach($result_kind as $value_kind){
+            ?>
             <tr>
-              <td>種類</td>
-              <td>割合</td>
+              <td><?php echo $value_kind['kindName']; ?></td>
+              <td><?php echo $value_kind['kindPercentage']; ?>％</td>
             </tr>
             <?php
-            foreach($result_kind as $value_kind){
-                    ?>
-                    <tr>
-                      <td><?php echo $value_kind['kindName']; ?></td>
-                      <td><?php echo $value_kind['kindPercentage']; ?>％</td>
-                    </tr>
-                    <?php
-            }
-            ?>
-          </table><br>
-          <?php
-      }
-      ?>
+        }
+        ?>
+      </table><br>
     </form>
 
     <?php echo return_top(); ?><br>
