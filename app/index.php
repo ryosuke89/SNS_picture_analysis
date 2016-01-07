@@ -3,7 +3,7 @@ require_once '../common/defineUtil.php';
 require_once '../common/scriptUtil.php';
 require_once '../common/dbaccesUtil.php';
 
-//categoryテーブルの値を取得
+//categoryテーブルの値を割合が高い順に取得
 $result_category = select_all_category();
 ?>
 <!DOCTYPE html>
