@@ -106,3 +106,47 @@ function select_detail_kind($categoryID){
 
     return $select_query->fetchAll(PDO::FETCH_ASSOC);
 }
+
+//カテゴリーごとの画像の番号を取得する関数
+function photoID_calc($snsID, $calcCategory){
+
+    $select_db = connect_MySQL();
+    $select_sql = "SELECT photoID FROM calc WHERE calcCategory=:calcCategory";
+    if($snsID != null){
+        $select_sql .= " AND snsID=:snsID";
+    }
+    $select_query = $select_db->prepare($select_sql);
+
+    if($snsID != null){
+        $select_query->bindValue(':snsID',$snsID);
+    }
+    $select_query->bindValue(':calcCategory',$calcCategory);
+
+    try{
+        $select_query->execute();
+    } catch (PDOException $e) {
+        $select_query=null;
+        return $e->getMessage();
+    }
+
+    return $select_query->fetchAll(PDO::FETCH_ASSOC);
+}
+
+//カテゴリーごとの画像のURLを取得する関数
+function url_photo($photoID){
+
+    $select_db = connect_MySQL();
+    $select_sql = "SELECT photoURL FROM photo WHERE photoID=:photoID";
+    $select_query = $select_db->prepare($select_sql);
+
+    $select_query->bindValue(':photoID',$photoID);
+
+    try{
+        $select_query->execute();
+    } catch (PDOException $e) {
+        $select_query=null;
+        return $e->getMessage();
+    }
+
+    return $select_query->fetchAll(PDO::FETCH_ASSOC);
+}
