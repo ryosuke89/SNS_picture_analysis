@@ -3,9 +3,9 @@ require_once '../common/defineUtil.php';
 require_once '../common/scriptUtil.php';
 require_once '../common/dbaccesUtil.php';
 
-//categoryテーブルの値を取得
+//categoryテーブルの値を割合が高い順に取得
 $result_category = select_sns_category(ex_sns($_GET['sns']));
-//kindテーブルの値を取得
+//kindテーブルの値を割合が高い順に取得
 $result_kind = select_sns_kind(ex_sns($_GET['sns']));
 ?>
 <!DOCTYPE html>
@@ -63,7 +63,7 @@ $result_kind = select_sns_kind(ex_sns($_GET['sns']));
       //カテゴリーごとの種類の割合をテーブル型で表示
       foreach($result_category as $value_category){
           ?>
-          <a href="<?php echo CATEGORY_DETAIL; ?>"><?php echo $value_category['categoryName']; ?></a>の割合：<?php echo $value_category['categoryPercentage']; ?>％<br>
+          <a href="<?php echo CATEGORY_DETAIL; ?>?sns=<?php echo $_GET['sns']; ?>&category=<?php echo $value_category['categoryName']; ?>"><?php echo $value_category['categoryName']; ?></a>の割合：<?php echo $value_category['categoryPercentage']; ?>％<br>
           <table border=1>
             <tr>
               <td>種類</td>
