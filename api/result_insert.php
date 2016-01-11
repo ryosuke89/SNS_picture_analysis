@@ -9,7 +9,7 @@
     //カテゴリーテーブル、種類テーブルにレコードがないことを確認する
     $db = false; //trueの場合：集計結果をDBに追加
     //SNSの番号を入力
-    $snsID = 0; //0の場合：全てのSNS
+    $snsID = 1; //5の場合：全てのSNS
 
     //カテゴリーごとの件数を取得
     $result_category = category_calc($snsID);
@@ -28,17 +28,16 @@
       foreach($result_category as $value_category){
           $categoryName = $value_category['calcCategory'];
           $categoryPercentage = $value_category['count(calcCategory)'] / $result_all_count[0]['count(*)'] * 100;
-          $category_snsID = $value_category['snsID'];
           ?>
           <tr>
             <th><?php echo $categoryName; ?></th>
             <th><?php echo $categoryPercentage; ?></th>
-            <th><?php echo $category_snsID; ?></th>
+            <th><?php echo $snsID; ?></th>
           </tr>
           <?php
           //カテゴリーの集計結果をDBに追加
           if($db == true){
-              $insert_category = insert_category($categoryName, $categoryPercentage, $category_snsID);
+              $insert_category = insert_category($categoryName, $categoryPercentage, $snsID);
           }
       }
       //エラーが発生しなければ表示
@@ -74,7 +73,6 @@
           foreach($result_kind as $value_kind){
               $kindName = $value_kind['calcKind'];
               $kindPercentage = $value_kind['count(calcKind)'] / $result_category_count[0]['count(*)'] * 100;
-              $kind_snsID = $value_kind['snsID'];
               foreach($select_category as $value_category){
                   if($value_category['categoryName'] == $value_kind['calcCategory']){
                       $kind_categoryID = $value_category['categoryID'];
@@ -84,13 +82,13 @@
               <tr>
                 <th><?php echo $kindName; ?></th>
                 <th><?php echo $kindPercentage; ?></th>
-                <th><?php echo $kind_snsID; ?></th>
+                <th><?php echo $snsID; ?></th>
                 <th><?php echo $kind_categoryID; ?></th>
               </tr>
               <?php
               //種類の集計結果をDBに追加
               if($db == true){
-                  $insert_kind = insert_kind($kindName, $kindPercentage, $kind_snsID, $kind_categoryID);
+                  $insert_kind = insert_kind($kindName, $kindPercentage, $snsID, $kind_categoryID);
               }
           }
       }
