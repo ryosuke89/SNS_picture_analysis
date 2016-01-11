@@ -305,7 +305,7 @@ function category_calc($snsID){
     $select_db = connect_MySQL();
     $select_sql = "SELECT calcCategory, count(calcCategory), snsID FROM calc";
     //snsIDを指定した場合、SQL文に追加
-    if($snsID != 0){
+    if($snsID != 5){
         $select_sql .= " WHERE snsID=:snsID";
     }
     $select_sql .= " GROUP BY calcCategory";
@@ -329,7 +329,7 @@ function count_all_calc($snsID){
     $select_db = connect_MySQL();
     $select_sql = "SELECT count(*) FROM calc";
     //snsIDを指定した場合、SQL文に追加
-    if($snsID != 0){
+    if($snsID != 5){
         $select_sql .= " WHERE snsID=:snsID";
     }
     $select_query = $select_db->prepare($select_sql);
@@ -352,13 +352,13 @@ function kind_calc($snsID, $calcCategory){
     $select_db = connect_MySQL();
     $select_sql = "SELECT calcKind, count(calcKind), snsID, calcCategory FROM calc WHERE calcCategory=:calcCategory";
     //snsIDを指定した場合、SQL文に追加
-    if($snsID != 0){
+    if($snsID != 5){
         $select_sql .= " AND snsID=:snsID";
     }
     $select_sql .= " GROUP BY calcKind";
     $select_query = $select_db->prepare($select_sql);
 
-    if($snsID != 0){
+    if($snsID != 5){
         $select_query->bindValue(':snsID',$snsID);
     }
     $select_query->bindValue(':calcCategory',$calcCategory);
@@ -379,13 +379,13 @@ function count_category_calc($snsID, $calcCategory){
     $select_db = connect_MySQL();
     $select_sql = "SELECT count(*) FROM calc WHERE calcCategory=:calcCategory";
     //snsIDを指定した場合、SQL文に追加
-    if($snsID != 0){
+    if($snsID != 5){
         $select_sql .= " AND snsID=:snsID";
     }
     $select_sql .= " GROUP BY calcCategory";
     $select_query = $select_db->prepare($select_sql);
 
-    if($snsID != 0){
+    if($snsID != 5){
         $select_query->bindValue(':snsID',$snsID);
     }
     $select_query->bindValue(':calcCategory',$calcCategory);
