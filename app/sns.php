@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 require_once '../common/defineUtil.php';
 require_once '../common/scriptUtil.php';
 require_once '../common/dbaccesUtil.php';
@@ -64,11 +64,14 @@ $result_kind = select_kind(ex_sns($_GET['sns']));
                 }
             }
 
-            //画像をランダムで表示
-            shuffle($url_array);
+            //重複する画像のURLを配列から削除
+            $url_unique = array_unique($url_array);
+            //画像のURLをランダムにする処理
+            shuffle($url_unique);
+            //画像の表示
             for($i = 0; $i < 6; $i++){
                 ?>
-                <img src="<?php echo $url_array[$i]; ?>" width="100" height="100"/>
+                <img src="<?php echo $url_unique[$i]; ?>" width="100" height="100"/>
                 <?php
             }
 
