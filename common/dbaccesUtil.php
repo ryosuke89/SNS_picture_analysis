@@ -11,14 +11,16 @@ function connect_MySQL(){
     }
 }
 
-//categoryテーブルの値を割合が高い順に取得する関数
-function select_all_category(){
+//SNSの番号を指定してcategoryテーブルの値を割合が高い順に取得する関数
+function select_category($snsID){
     //dbを確立
     $select_db = connect_MySQL();
     //SQL文
-    $select_sql = "SELECT * FROM category ORDER BY categoryPercentage DESC";
+    $select_sql = "SELECT * FROM category WHERE snsID=:snsID ORDER BY categoryPercentage DESC";
     //クエリとして用意
     $select_query = $select_db->prepare($select_sql);
+
+    $select_query->bindValue(':snsID',$snsID);
 
     //SQLを実行
     try{
@@ -31,27 +33,8 @@ function select_all_category(){
     return $select_query->fetchAll(PDO::FETCH_ASSOC);
 }
 
-//SNSの番号を指定してcategoryテーブルの値を割合が高い順に取得する関数
-function select_sns_category($snsID){
-
-    $select_db = connect_MySQL();
-    $select_sql = "SELECT * FROM category WHERE snsID=:snsID ORDER BY categoryPercentage DESC";
-    $select_query = $select_db->prepare($select_sql);
-
-    $select_query->bindValue(':snsID',$snsID);
-
-    try{
-        $select_query->execute();
-    }catch(PDOException $e){
-        $select_query=null;
-        return $e->getMessage();
-    }
-
-    return $select_query->fetchAll(PDO::FETCH_ASSOC);
-}
-
 //SNSの番号を指定してkindテーブルの値を割合が高い順に取得する関数
-function select_sns_kind($snsID){
+function select_kind($snsID){
 
     $select_db = connect_MySQL();
     $select_sql = "SELECT * FROM kind WHERE snsID=:snsID ORDER BY kindPercentage DESC";
