@@ -9,7 +9,7 @@
     //画像認識の結果を重複を除いてDBから取得
     $select_recognition = group_by_recognition();
     //リストの取得
-    $select_list = select_list();
+    $select_list = select_all('list');
     ?>
     <table border=1>
       <tr>
