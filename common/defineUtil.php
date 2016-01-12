@@ -6,3 +6,7 @@ const CATEGORY_DETAIL = 'category_detail.php';                //カテゴリー�
 const CONTACT = 'contact.php';                                //お問い合わせページ
 const CONTACT_CONFIRM = 'contact_confirm.php';                //お問い合わせ確認ページ
 const CONTACT_RESULT = 'contact_result.php';                  //お問い合わせ結果ページ
+const TWT = 'Twitter';                                        //Twitter
+const FB = 'Facebook';                                        //Facebook
+const GGP = 'Google+';                                        //Google+
+const INS = 'Instagram';                                      //Instagram
