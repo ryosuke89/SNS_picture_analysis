@@ -1,4 +1,4 @@
-﻿<?php require_once 'api_dbaccesUtil.php'; ?>
+﻿<?php require_once '../common/api_dbaccesUtil.php'; ?>
 <!DOCTYPE html>
 <html lang="ja">
 <head>
