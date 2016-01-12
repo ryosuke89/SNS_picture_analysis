@@ -316,13 +316,14 @@ function select_all($all){
 }
 
 //DBを削除する関数
-function delete_all($all, $photoID){
+function delete_all($all, $id){
 
     $delete_db = connect_MySQL();
-    $delete_sql = "DELETE FROM $all WHERE photoID=:photoID";
+    $delete_id = $all . 'ID';
+    $delete_sql = "DELETE FROM $all WHERE $delete_id=:id";
     $delete_query = $delete_db->prepare($delete_sql);
 
-    $delete_query->bindValue(':photoID',$photoID);
+    $delete_query->bindValue(':id',$id);
 
     try{
         $delete_query->execute();
