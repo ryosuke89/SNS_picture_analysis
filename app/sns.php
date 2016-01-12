@@ -31,6 +31,7 @@ $result_kind = select_kind(ex_sns($_GET['sns']));
       //配列、配列番号の初期化
       $url_array = array();
       $key = 0;
+
       //カテゴリーごとの種類の割合をテーブル型で表示
       foreach($result_category as $value_category){
           ?>
@@ -69,7 +70,7 @@ $result_kind = select_kind(ex_sns($_GET['sns']));
             //画像のURLをランダムにする処理
             shuffle($url_unique);
             //画像の表示
-            for($i = 0; $i < 6; $i++){
+            for($i = 0; $i < 4; $i++){
                 ?>
                 <img src="<?php echo $url_unique[$i]; ?>" width="100" height="100"/>
                 <?php
@@ -84,7 +85,6 @@ $result_kind = select_kind(ex_sns($_GET['sns']));
       }
       ?>
     </form>
-
     <?php echo return_top(); ?><br>
     <a href="<?php echo CONTACT; ?>">お問い合わせ</a>
   </body>
