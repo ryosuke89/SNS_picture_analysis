@@ -52,7 +52,7 @@
     echo "<br>";
 
     //カテゴリーの集計結果を取得
-    $select_category = select_category();
+    $select_category = select_all('category');
     ?>
     <table border=1>
       <tr>
