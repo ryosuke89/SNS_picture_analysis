@@ -26,7 +26,7 @@
           </tr>
 
           <?php
-          $result_photo = select_photo();
+          $result_photo = select_all('photo');
 
           foreach($result_photo as $value_photo){
               ?>
@@ -74,7 +74,7 @@
           </tr>
 
           <?php
-          $result_recognition = select_recognition();
+          $result_recognition = select_all('recognition');
 
           foreach($result_recognition as $value_recognition){
               ?>
@@ -122,7 +122,7 @@
           </tr>
 
           <?php
-          $result_list = select_list();
+          $result_list = select_all('list');
 
           foreach($result_list as $value_list){
               ?>
@@ -152,7 +152,7 @@
           </tr>
 
           <?php
-          $result_calc = select_calc();
+          $result_calc = select_all('calc');
 
           foreach($result_calc as $result_calc){
               ?>
@@ -182,7 +182,7 @@
           </tr>
 
           <?php
-          $result_category = select_category();
+          $result_category = select_all('category');
 
           foreach($result_category as $result_category){
               ?>
@@ -212,7 +212,7 @@
           </tr>
 
           <?php
-          $result_kind = select_kind();
+          $result_kind = select_all('kind');
 
           foreach($result_kind as $result_kind){
               ?>
