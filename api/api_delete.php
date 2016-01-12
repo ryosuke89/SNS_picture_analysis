@@ -41,7 +41,7 @@
     //画像のURLを削除
     if($photo == true){
         for($i = $first_photo; $i <= $last_photo; $i++){
-            $result_photo = delete_photo($first_photo);
+            $result_photo = delete_all('photo', $first_photo);
             $first_photo = $first_photo + 1;
         }
         if(!isset($result_photo)){
@@ -52,7 +52,7 @@
     //画像認識の結果を削除
     if($recognition == true){
         for($i = $first_recognition; $i <= $last_recognition; $i++){
-            $result_recognition = delete_recognition($first_recognition);
+            $result_recognition = delete_all('recognition', $first_recognition);
             $first_recognition = $first_recognition + 1;
         }
         if(!isset($result_recognition)){
@@ -63,7 +63,7 @@
     //リストの削除
     if($list == true){
         for($i = $first_list; $i <= $last_list; $i++){
-            $result_list = delete_list($first_list);
+            $result_list = delete_all('list', $first_list);
             $first_list = $first_list + 1;
         }
         if(!isset($result_list)){
@@ -74,7 +74,7 @@
     //認識結果1を変換した種類名、カテゴリー名の削除
     if($calc == true){
         for($i = $first_calc; $i <= $last_calc; $i++){
-            $result_calc = delete_calc($first_calc);
+            $result_calc = delete_all('calc', $first_calc);
             $first_calc = $first_calc + 1;
         }
         if(!isset($result_calc)){
@@ -85,7 +85,7 @@
     //種類の集計結果を削除
     if($kind == true){
         for($i = $first_kind; $i <= $last_kind; $i++){
-            $result_kind = delete_kind($first_kind);
+            $result_kind = delete_all('kind', $first_kind);
             $first_kind = $first_kind + 1;
         }
         if(!isset($result_kind)){
@@ -96,7 +96,7 @@
     //カテゴリーの集計結果を削除
     if($category == true){
         for($i = $first_category; $i <= $last_category; $i++){
-            $result_category = delete_category($first_category);
+            $result_category = delete_all('category', $first_category);
             $first_category = $first_category + 1;
         }
         if(!isset($result_category)){
