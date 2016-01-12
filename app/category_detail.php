@@ -5,7 +5,6 @@ require_once '../common/dbaccesUtil.php';
 
 //categoryテーブルの値を取得
 $result_category = select_detail_category($_GET['category']);
-
 //配列、配列番号の初期化
 $kind_array = array();
 $key = 0;
@@ -22,9 +21,9 @@ foreach($result_category as $value_category){
 
 //GETの取得
 if(empty($_GET['sns'])){
-    $sns = null;
+    $get_sns = null;
 }else{
-    $sns = $_GET['sns'];
+    $get_sns = $_GET['sns'];
 }
 ?>
 <!DOCTYPE html>
@@ -37,59 +36,81 @@ if(empty($_GET['sns'])){
   <script type="text/javascript" src="scriptUtil.php"></script>
   <script type="text/javascript">
   //カテゴリーごとの割合の円グラフを表示する処理の取得
-  <?php detail_chart($sns, $_GET['category'], $kind_array); ?>
+  <?php detail_chart($get_sns, $_GET['category'], $kind_array); ?>
   </script>
 </head>
   <body>
     <h1><a href="<?php echo ROOT_URL; ?>">SNS Photos</a></h1>
     <h4>SNSに投稿されている画像の傾向分析サイト</h4><br>
-    <!--円グラフの表示-->
-    <div id="chart_div1"></div>
-    <div id="chart_div2"></div>
-    <div id="chart_div3"></div>
-    <div id="chart_div4"></div>
     <form action="<?php echo SNS; ?>" method="POST">
-      <table border=1>
-        <tr>
-          <td>種類</td>
-          <td>割合</td>
-        </tr>
-        <?php
-        //種類の割合をテーブル型で表示
-        foreach($result_kind as $value_kind){
-            ?>
-            <tr>
-              <td><?php echo $value_kind['kindName']; ?></td>
-              <td><?php echo $value_kind['kindPercentage']; ?>％</td>
-            </tr>
-            <?php
-        }
+      <?php
+      //配列、配列番号の初期化
+      $url_array = array();
+      $key = 0;
 
-        //snsIDの取得
-        if(empty($_GET['sns'])){
-            $snsID = null;
-        }else{
-            $snsID = ex_sns($_GET['sns']);
-        }
+      //snsIDの取得
+      if(empty($_GET['sns'])){
+          $snsID = null;
+      }else{
+          $snsID = ex_sns($_GET['sns']);
+      }
 
-        foreach($result_category as $value_category){
-            //カテゴリーごとの画像の番号を取得
-            $result_photoID = photoID_calc($snsID, $value_category['categoryName']);
-            //カテゴリーごとの画像のURLを取得
-            foreach($result_photoID as $value_photoID){
-                $result_url = url_photo($value_photoID['photoID']);
+      //種類の割合をテーブル型で表示
+      foreach($result_category as $value_category){
+          if(empty($snsID) || $value_category['snsID'] == $snsID){
+              ?>
+              <!--円グラフの表示-->
+              <div id="chart_div<?php echo $value_category['snsID'];?>"></div>
+              <table border=1>
+                <tr>
+                  <td>種類</td>
+                  <td>割合</td>
+                </tr>
+                <?php
+                foreach($kind_array as $value_kind_array){
+                    if($value_category['categoryID'] == $value_kind_array['categoryID']){
+                        ?>
+                        <tr>
+                          <td><?php echo $value_kind_array['kindName']; ?></td>
+                          <td><?php echo $value_kind_array['kindPercentage']; ?>％</td>
+                        </tr>
+                        <?php
+                    }
+                }
+
+                //カテゴリーごとの画像の番号を取得
+                $result_photoID = photoID_calc($value_category['snsID'], $value_category['categoryName']);
+                //カテゴリーごとの画像のURLを取得
+                foreach($result_photoID as $value_photoID){
+                    $result_url = url_photo($value_photoID['photoID']);
+                    //画像のURLを配列に格納
+                    foreach($result_url as $value_url){
+                        $url_array += array($key=>$value_url['photoURL']);
+                        $key = $key + 1;
+                    }
+                }
+
+                //重複する画像のURLを配列から削除
+                $url_unique = array_unique($url_array);
+                //画像のURLをランダムにする処理
+                shuffle($url_unique);
                 //画像の表示
-                foreach($result_url as $value_url){
+                for($i = 0; $i < 4; $i++){
                     ?>
-                    <img src="<?php echo $value_url['photoURL']; ?>" width="100" height="100"/>
+                    <img src="<?php echo $url_unique[$i]; ?>" width="100" height="100"/>
                     <?php
                 }
-            }
-        }
-        ?>
-      </table><br>
-    </form>
 
+                //配列、配列番号の初期化
+                $url_array = array();
+                $key = 0;
+                ?>
+              </table><br>
+              <?php
+          }
+      }
+      ?>
+    </form>
     <?php echo return_top(); ?><br>
     <a href="<?php echo CONTACT; ?>">お問い合わせ</a>
   </body>
