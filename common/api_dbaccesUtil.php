@@ -179,109 +179,6 @@ function insert_kind($kindName, $kindPercentage, $snsID, $categoryID){
     return null;
 }
 
-//画像のURLを表示する関数
-function select_photo(){
-
-    $select_db = connect_MySQL();
-    $select_sql = "SELECT * FROM photo";
-    $select_query = $select_db->prepare($select_sql);
-
-    try{
-        $select_query->execute();
-    } catch (PDOException $e) {
-        $select_query=null;
-        return $e->getMessage();
-    }
-
-    //該当するレコードを連想配列として返却
-    return $select_query->fetchAll(PDO::FETCH_ASSOC);
-}
-
-//画像認識の結果を表示する関数
-function select_recognition(){
-
-    $select_db = connect_MySQL();
-    $select_sql = "SELECT * FROM recognition";
-    $select_query = $select_db->prepare($select_sql);
-
-    try{
-        $select_query->execute();
-    } catch (PDOException $e) {
-        $select_query=null;
-        return $e->getMessage();
-    }
-
-    return $select_query->fetchAll(PDO::FETCH_ASSOC);
-}
-
-//リストを表示する関数
-function select_list(){
-
-    $select_db = connect_MySQL();
-    $select_sql = "SELECT * FROM list";
-    $select_query = $select_db->prepare($select_sql);
-
-    try{
-        $select_query->execute();
-    } catch (PDOException $e) {
-        $select_query=null;
-        return $e->getMessage();
-    }
-
-    return $select_query->fetchAll(PDO::FETCH_ASSOC);
-}
-
-//認識結果1を変換した種類名、カテゴリー名を表示する関数
-function select_calc(){
-
-    $select_db = connect_MySQL();
-    $select_sql = "SELECT * FROM calc";
-    $select_query = $select_db->prepare($select_sql);
-
-    try{
-        $select_query->execute();
-    } catch (PDOException $e) {
-        $select_query=null;
-        return $e->getMessage();
-    }
-
-    return $select_query->fetchAll(PDO::FETCH_ASSOC);
-}
-
-//カテゴリーの集計結果を表示する関数
-function select_category(){
-
-    $select_db = connect_MySQL();
-    $select_sql = "SELECT * FROM category";
-    $select_query = $select_db->prepare($select_sql);
-
-    try{
-        $select_query->execute();
-    } catch (PDOException $e) {
-        $select_query=null;
-        return $e->getMessage();
-    }
-
-    return $select_query->fetchAll(PDO::FETCH_ASSOC);
-}
-
-//種類の集計結果を表示する関数
-function select_kind(){
-
-    $select_db = connect_MySQL();
-    $select_sql = "SELECT * FROM kind";
-    $select_query = $select_db->prepare($select_sql);
-
-    try{
-        $select_query->execute();
-    } catch (PDOException $e) {
-        $select_query=null;
-        return $e->getMessage();
-    }
-
-    return $select_query->fetchAll(PDO::FETCH_ASSOC);
-}
-
 //画像認識の結果を重複を除いて表示する関数
 function group_by_recognition(){
 
@@ -400,104 +297,32 @@ function count_category_calc($snsID, $calcCategory){
     return $select_query->fetchAll(PDO::FETCH_ASSOC);
 }
 
-//画像のURLを削除する関数
-function delete_photo($photoID){
+//DBを表示する関数
+function select_all($all){
+
+    $select_db = connect_MySQL();
+    $select_sql = "SELECT * FROM $all";
+    $select_query = $select_db->prepare($select_sql);
+
+    try{
+        $select_query->execute();
+    } catch (PDOException $e) {
+        $select_query=null;
+        return $e->getMessage();
+    }
+
+    //該当するレコードを連想配列として返却
+    return $select_query->fetchAll(PDO::FETCH_ASSOC);
+}
+
+//DBを削除する関数
+function delete_all($all, $photoID){
 
     $delete_db = connect_MySQL();
-    $delete_sql = "DELETE FROM photo WHERE photoID=:photoID";
+    $delete_sql = "DELETE FROM $all WHERE photoID=:photoID";
     $delete_query = $delete_db->prepare($delete_sql);
 
     $delete_query->bindValue(':photoID',$photoID);
-
-    try{
-        $delete_query->execute();
-    } catch (PDOException $e) {
-        $delete_query=null;
-        return $e->getMessage();
-    }
-    return null;
-}
-
-//画像認識の結果を削除する関数
-function delete_recognition($recognitionID){
-
-    $delete_db = connect_MySQL();
-    $delete_sql = "DELETE FROM recognition WHERE recognitionID=:recognitionID";
-    $delete_query = $delete_db->prepare($delete_sql);
-
-    $delete_query->bindValue(':recognitionID',$recognitionID);
-
-    try{
-        $delete_query->execute();
-    } catch (PDOException $e) {
-        $delete_query=null;
-        return $e->getMessage();
-    }
-    return null;
-}
-
-//リストを削除する関数
-function delete_list($listID){
-
-    $delete_db = connect_MySQL();
-    $delete_sql = "DELETE FROM list WHERE listID=:listID";
-    $delete_query = $delete_db->prepare($delete_sql);
-
-    $delete_query->bindValue(':listID',$listID);
-
-    try{
-        $delete_query->execute();
-    } catch (PDOException $e) {
-        $delete_query=null;
-        return $e->getMessage();
-    }
-    return null;
-}
-
-//認識結果1を変換した種類名、カテゴリー名を削除する関数
-function delete_calc($calcID){
-
-    $delete_db = connect_MySQL();
-    $delete_sql = "DELETE FROM calc WHERE calcID=:calcID";
-    $delete_query = $delete_db->prepare($delete_sql);
-
-    $delete_query->bindValue(':calcID',$calcID);
-
-    try{
-        $delete_query->execute();
-    } catch (PDOException $e) {
-        $delete_query=null;
-        return $e->getMessage();
-    }
-    return null;
-}
-
-//カテゴリーの集計結果を削除する関数
-function delete_category($categoryID){
-
-    $delete_db = connect_MySQL();
-    $delete_sql = "DELETE FROM category WHERE categoryID=:categoryID";
-    $delete_query = $delete_db->prepare($delete_sql);
-
-    $delete_query->bindValue(':categoryID',$categoryID);
-
-    try{
-        $delete_query->execute();
-    } catch (PDOException $e) {
-        $delete_query=null;
-        return $e->getMessage();
-    }
-    return null;
-}
-
-//種類の集計結果を削除する関数
-function delete_kind($kindID){
-
-    $delete_db = connect_MySQL();
-    $delete_sql = "DELETE FROM kind WHERE kindID=:kindID";
-    $delete_query = $delete_db->prepare($delete_sql);
-
-    $delete_query->bindValue(':kindID',$kindID);
 
     try{
         $delete_query->execute();
