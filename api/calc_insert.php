@@ -1,4 +1,4 @@
-<?php require_once '../common/api_dbaccesUtil.php'; ?>
+﻿<?php require_once '../common/api_dbaccesUtil.php'; ?>
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -31,7 +31,7 @@
                 }
                 //エラーが発生しなければ表示
                 if(!isset($result) && $select_recognition[$i]['result1'] == $value_list['listName']){
-                    echo 'recognitionID=' . $select_recognition[$i]['recognitionID'] . 'をDBに追加しました。<br>';
+                    echo 'recognitionID=' . $select_recognition[$i]['recognitionID'] . 'をDBに追加しました。<br> . <br>';
                 }
             }
         }
