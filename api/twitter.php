@@ -1,9 +1,8 @@
 ﻿<?php
 //https://github.com/abraham/twitteroauthでダウンロード
 //TwitterOAuth.phpの「private function oAuthRequest(url,method, $parameters)」のprivateを削除
-//twitteroauthフォルダと同じ階層に置く
 require_once 'twitteroauth/autoload.php';
-require_once 'api_dbaccesUtil.php';
+require_once '../common/api_dbaccesUtil.php';
 use Abraham\TwitterOAuth\TwitterOAuth;
 ?>
 <!DOCTYPE html>
@@ -29,7 +28,7 @@ use Abraham\TwitterOAuth\TwitterOAuth;
 
     //処理の確認
     $confirm = true;    //ツイートIDの確認の場合true
-    $tweet_id = 679088; //確認したツイートIDを入力(上6桁)
+    $tweet_id = 686336; //確認したツイートIDを入力(上6桁)
     $db = false;        //DBに追加する場合true
 
     //確認の場合と取得の場合で回数を変える
@@ -43,7 +42,7 @@ use Abraham\TwitterOAuth\TwitterOAuth;
     for($i = 0; $i < $repeat; $i++){
         //ツイート検索パラメータの設定
         $params = array(
-                        "q"=>"filter:images since:2015-12-21 until:2015-12-22", //検索キーワード
+                        "q"=>"filter:images since:2016-1-11 until:2016-1-12", //検索キーワード
                         "lang"=>"ja",             //言語コード
                         "count"=>50,              //取得件数（100件が上限）
                         "include_entities"=>true, //trueにすると添付URLについての情報を追加で取得できる
