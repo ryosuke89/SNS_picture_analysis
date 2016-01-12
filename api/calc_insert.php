@@ -18,9 +18,9 @@
     $last_array = $last - 1;
 
     //画像認識の結果を取得
-    $select_recognition = select_recognition();
+    $select_recognition = select_all('recognition');
     //リストの取得
-    $select_list = select_list();
+    $select_list = select_all('list');
 
     //リストを利用して認識結果1を種類名、カテゴリー名に変換し、DBに追加
     if($db == true){
