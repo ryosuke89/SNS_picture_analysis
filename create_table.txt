@@ -1,20 +1,21 @@
 SNS：
-create table sns(snsID int primary key, snsName varchar(255)) engine=InnoDB;
+CREATE TABLE sns(snsID int primary key, snsName varchar(255)) ENGINE=InnoDB;
+INSERT INTO sns(snsID, snsName) VALUES(1, 'Twitter'), (2, 'Facebook'), (3, 'Google+'), (4, 'Instagram'), (5, 'SNS全体');
 
 画像(autoincrement)：
-create table photo(photoID int primary key auto_increment, photoURL varchar(255), postedDatetime datetime, snsID int, foreign key(snsID) references sns(snsID)) engine=InnoDB;
+CREATE TABLE photo(photoID int primary key auto_increment, photoURL varchar(255), postedDatetime datetime, snsID int, foreign key(snsID) references sns(snsID)) ENGINE=InnoDB;
 
 認識(autoincrement)：
-create table recognition(recognitionID int primary key auto_increment, result1 varchar(255), result2 varchar(255), result3 varchar(255), result4 varchar(255), result5 varchar(255), result6 varchar(255), result7 varchar(255), result8 varchar(255), result9 varchar(255), result10 varchar(255), result11 varchar(255), result12 varchar(255), result13 varchar(255), result14 varchar(255), result15 varchar(255), result16 varchar(255), result17 varchar(255), result18 varchar(255), result19 varchar(255), result20 varchar(255), snsID int, photoID int, foreign key(snsID) references sns(snsID), foreign key(photoID) references photo(photoID)) engine=InnoDB;
+CREATE TABLE recognition(recognitionID int primary key auto_increment, result1 varchar(255), result2 varchar(255), result3 varchar(255), result4 varchar(255), result5 varchar(255), result6 varchar(255), result7 varchar(255), result8 varchar(255), result9 varchar(255), result10 varchar(255), result11 varchar(255), result12 varchar(255), result13 varchar(255), result14 varchar(255), result15 varchar(255), result16 varchar(255), result17 varchar(255), result18 varchar(255), result19 varchar(255), result20 varchar(255), snsID int, photoID int, foreign key(snsID) references sns(snsID), foreign key(photoID) references photo(photoID)) ENGINE=InnoDB;
 
 リスト(autoincrement)：
-create table list(listID int primary key auto_increment, listName varchar(255), listKind varchar(255), listCategory varchar(255)) engine=InnoDB;
+CREATE TABLE list(listID int primary key auto_increment, listName varchar(255), listKind varchar(255), listCategory varchar(255)) ENGINE=InnoDB;
 
 計算(autoincrement)：
-create table calc(calcID int primary key auto_increment, calcKind varchar(255), calcCategory varchar(255), snsID int, photoID int, foreign key(snsID) references sns(snsID), foreign key(photoID) references photo(photoID)) engine=InnoDB;
+CREATE TABLE calc(calcID int primary key auto_increment, calcKind varchar(255), calcCategory varchar(255), snsID int, photoID int, foreign key(snsID) references sns(snsID), foreign key(photoID) references photo(photoID)) ENGINE=InnoDB;
 
-カテゴリー：
-create table category(categoryID int primary key, categoryName varchar(255), categoryPercentage int, snsID int, foreign key(snsID) references sns(snsID)) engine=InnoDB;
+カテゴリー(autoincrement)：
+CREATE TABLE category(categoryID int primary key auto_increment, categoryName varchar(255), categoryPercentage int, snsID int, foreign key(snsID) references sns(snsID)) ENGINE=InnoDB;
 
-種類：
-create table kind(kindID int primary key, kindName varchar(255), kindPercentage int, snsID int, categoryID int, foreign key(snsID) references sns(snsID), foreign key(categoryID) references category(categoryID)) engine=InnoDB;
+種類(autoincrement)：
+CREATE TABLE kind(kindID int primary key auto_increment, kindName varchar(255), kindPercentage int, snsID int, categoryID int, foreign key(snsID) references sns(snsID), foreign key(categoryID) references category(categoryID)) ENGINE=InnoDB;
