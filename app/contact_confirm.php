@@ -7,15 +7,20 @@ require_once '../common/scriptUtil.php';
 <head>
   <meta charset="UTF-8">
   <title>SNS Photos</title>
+  <link rel="stylesheet" type="text/css" href="../css/css_contact_confirm.css">
 </head>
   <body>
-    <h1><a href="<?php echo ROOT_URL; ?>">SNS Photos</a></h1>
-    <h4>SNSに投稿されている画像の傾向分析サイト</h4><br>
-
+    <div id="header"><div class="title"><a href="<?php echo ROOT_URL; ?>">
+    <span style="vertical-align: middle; font-size: 35px;">SNS Photos</span></a>
+    <span style="vertical-align: 3px; font-size: 50%; margin-left: 20px">
+    SNSに投稿されている画像の傾向分析サイト</span></div></div>
+    <div id="content">
     <?php
-    //URLで直接アクセスした場合のエラー処理
+    //URLで直接アクセスした場合、トップページに移動する処理
     if(empty($_POST['mode'])){
-        echo 'アクセスルートが不正です。最初からやり直してください。<br>';
+        ?>
+        <meta http-equiv="refresh" content="0; URL=<?php echo ROOT_URL; ?>">
+        <?php
     }elseif($_POST['mode'] == 'CONFIRM'){
         session_start();
         //POSTの値をセッションに格納し、連想配列に値を格納
@@ -28,25 +33,25 @@ require_once '../common/scriptUtil.php';
         //未入力項目がある場合非表示
         if(!in_array(null,$confirm_array, true)){
             ?>
-            <h3>確認画面</h3><br>
+            <div class="text">確認画面</div>
             <?php
             echo 'お名前：' . $confirm_array['name'] . "<br>";
             echo 'メールアドレス：' . $confirm_array['mail_address'] . "<br>";
             echo 'お問い合わせの種類：' . $confirm_array['contact_kind'] . "<br>";
-            echo 'お問い合わせ内容：' . $confirm_array['contact_contents'] . "<br>" . "<br>";
-            echo '上記の内容で送信します。よろしいですか？' . "<br>" . "<br>";
+            echo 'お問い合わせ内容：' . $confirm_array['contact_contents'];
             ?>
+            <div class="confirm">上記の内容で送信します。よろしいですか？</div>
             <form action="<?php echo CONTACT_RESULT; ?>" method="POST">
               <!--アクセスルートの確認用-->
               <input type="hidden" name="mode" value="RESULT">
-              <input type="submit" name="yes" style="width:110px" value="送信する"><br>
+              <input type="submit" name="yes" style="width:110px" value="送信する">
             </form>
             <?php
         }else{
             ?>
-            <h3>入力項目が不完全です。<br>
-            再度入力を行ってください。</h3>
-            不完全な項目<br><br>
+            入力項目が不完全です。<br>
+            再度入力を行ってください。<br><br>
+            不完全な項目<br>
             <?php
             //不完全な項目の表示
             foreach($confirm_array as $key => $value){
@@ -66,15 +71,21 @@ require_once '../common/scriptUtil.php';
                 }
             }
         }
+        ?>
+        <form action="<?php echo CONTACT; ?>" method="POST">
+          <div class="submit">
+          <!--再入力時用-->
+          <input type="hidden" name="mode" value="REINPUT">
+          <input type="submit" name="no" style="width:110px" value="入力画面に戻る"></div>
+        </form>
+        <?php
     }
     ?>
-    <form action="<?php echo CONTACT; ?>" method="POST">
-      <!--再入力時用-->
-      <input type="hidden" name="mode" value="REINPUT">
-      <input type="submit" name="no" style="width:110px" value="入力画面に戻る"><br>
-    </form>
-
-    <?php echo return_top(); ?><br>
-    <a href="<?php echo CONTACT; ?>">お問い合わせ</a>
+    </div>
+    <div id="footer">
+    <div class="link">
+    <?php echo return_top(); ?>
+    <span style="margin-left: 63px">
+    <a href="<?php echo CONTACT; ?>">お問い合わせ</a></span></div></div>
   </body>
 </html>
