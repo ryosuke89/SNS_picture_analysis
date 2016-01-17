@@ -9,7 +9,7 @@
     //カテゴリーテーブル、種類テーブルにレコードがないことを確認する
     $db = false; //trueの場合：集計結果をDBに追加
     //SNSの番号を入力
-    $snsID = 1; //5の場合：全てのSNS
+    $snsID = 5; //1:Twitter、2:Facebook、3:Google+、4:Instagram、5:SNS全体
 
     //カテゴリーごとの件数を取得
     $result_category = category_calc($snsID);
