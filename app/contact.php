@@ -7,45 +7,43 @@ require_once '../common/scriptUtil.php';
 <head>
   <meta charset="UTF-8">
   <title>SNS Photos</title>
+  <link rel="stylesheet" type="text/css" href="../css/css_contact.css">
 </head>
   <body>
-    <h1><a href="<?php echo ROOT_URL; ?>">SNS Photos</a></h1>
-    <h4>SNSに投稿されている画像の傾向分析サイト</h4><br>
+    <div id="header"><div class="title"><a href="<?php echo ROOT_URL; ?>">
+    <span style="vertical-align: middle; font-size: 35px;">SNS Photos</span></a>
+    <span style="vertical-align: 3px; font-size: 50%; margin-left: 20px">
+    SNSに投稿されている画像の傾向分析サイト</span></div></div>
+    <div id="content">
     <form action="<?php echo CONTACT_CONFIRM; ?>" method="POST">
-      <h3>お問い合わせ</h3>
+      <div class="text">お問い合わせ</div>
       <!--再入力時用-->
       <?php session_start(); ?>
-      <table>
-        <tr>
-          <td>お名前：</td>
-          <td><input type="text" name="name" value="<?php echo contact_session('name'); ?>"></td>
-        </tr><br><br>
+          <label for="name">お名前：</label>
+          <input type="text" name="name" value="<?php echo contact_session('name'); ?>"><br>
 
-        <tr>
-          <td>メールアドレス：</td>
-          <td><input type="text" name="mail_address" value="<?php echo contact_session('mail_address'); ?>"></td>
-        </tr><br><br>
+          <label for="mail_address">メールアドレス：</label>
+          <input type="text" name="mail_address" value="<?php echo contact_session('mail_address'); ?>"><br>
 
-        <tr>
-          <td>お問い合わせの種類：</td>
-          <td><select name="contact_kind">
+          <label for="contact_kind">お問い合わせの種類：</label>
+          <select name="contact_kind">
             <option value="">--選択してください--</option>
             <option value="使い方" <?php if(contact_session('contact_kind') == "使い方"){echo "selected";} ?>>使い方</option>
             <option value="問題点・改善点" <?php if(contact_session('contact_kind') == "問題点・改善点"){echo "selected";} ?>>問題点・改善点</option>
             <option value="その他" <?php if(contact_session('contact_kind') == "その他"){echo "selected";} ?>>その他</option>
-          </select></td><br><br>
-        </tr>
+          </select><br>
 
-        <tr><td>お問い合わせ内容：
-          <td><textarea name="contact_contents" rows=10 cols=50 style="resize:none" wrap="hard"><?php echo contact_session('contact_contents'); ?></textarea></td><br><br><br>
-        </tr>
-      </table>
+          <label for="contact_contents">お問い合わせ内容：</label>
+          <textarea name="contact_contents" rows=10 cols=50 style="resize:none" wrap="hard"><?php echo contact_session('contact_contents'); ?></textarea></div><br>
       <!--アクセスルートの確認用-->
+      <div class="submit">
       <input type="hidden" name="mode" value="CONFIRM">
-      <input type="submit" name="confirm" value="入力内容を確認する"><br>
-    </form>
-
-    <?php echo return_top(); ?><br>
-    <a href="<?php echo CONTACT; ?>">お問い合わせ</a>
+      <input type="submit" name="confirm" value="入力内容を確認する">
+    </form></div>
+    <div id="footer">
+    <div class="link">
+    <?php echo return_top(); ?>
+    <span style="margin-left: 63px">
+    <a href="<?php echo CONTACT; ?>">お問い合わせ</a></span></div></div>
   </body>
 </html>
