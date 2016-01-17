@@ -3,6 +3,15 @@ require_once '../common/defineUtil.php';
 require_once '../common/scriptUtil.php';
 require_once '../common/dbaccesUtil.php';
 
+//エラーを表示させない処理
+if(empty($_GET['sns'])){
+    $_GET['sns'] = null;
+    ?>
+    <!--GETを受け取れない場合、トップページに移動する処理-->
+    <meta http-equiv="refresh" content="0; URL=<?php echo ROOT_URL; ?>">
+    <?php
+}
+
 //categoryテーブルの値を割合が高い順に取得
 $result_category = select_category(ex_sns($_GET['sns']));
 //kindテーブルの値を割合が高い順に取得
@@ -13,6 +22,7 @@ $result_kind = select_kind(ex_sns($_GET['sns']));
 <head>
   <meta charset="UTF-8">
   <title>SNS Photos</title>
+  <link rel="stylesheet" type="text/css" href="../css/css_sns.css">
   <!--AJAX APIの読み込み-->
   <script type="text/javascript" src="https://www.google.com/jsapi"></script>
   <script type="text/javascript" src="scriptUtil.php"></script>
@@ -22,8 +32,11 @@ $result_kind = select_kind(ex_sns($_GET['sns']));
   </script>
 </head>
   <body>
-    <h1><a href="<?php echo ROOT_URL; ?>">SNS Photos</a></h1>
-    <h4>SNSに投稿されている画像の傾向分析サイト</h4><br>
+    <div id="header"><div class="title"><a href="<?php echo ROOT_URL; ?>">
+    <span style="vertical-align: middle; font-size: 35px;">SNS Photos</span></a>
+    <span style="vertical-align: 3px; font-size: 50%; margin-left: 20px">
+    SNSに投稿されている画像の傾向分析サイト</span></div></div>
+    <div id="content">
     <!--円グラフの表示-->
     <div id="chart_div"></div>
     <form action="<?php echo SNS; ?>" method="POST">
@@ -31,15 +44,18 @@ $result_kind = select_kind(ex_sns($_GET['sns']));
       //配列、配列番号の初期化
       $url_array = array();
       $key = 0;
-
+      ?>
+      <div class="category">
+      <?php
       //カテゴリーごとの種類の割合をテーブル型で表示
       foreach($result_category as $value_category){
           ?>
-          <a href="<?php echo CATEGORY_DETAIL; ?>?sns=<?php echo $_GET['sns']; ?>&category=<?php echo $value_category['categoryName']; ?>"><?php echo $value_category['categoryName']; ?></a>の割合：<?php echo $value_category['categoryPercentage']; ?>％<br>
-          <table border=1>
+          <a href="<?php echo CATEGORY_DETAIL; ?>?sns=<?php echo $_GET['sns']; ?>&category=<?php echo $value_category['categoryName']; ?>">
+          <span style="font-size: 20px;"><?php echo $value_category['categoryName']; ?></a>の割合：<?php echo $value_category['categoryPercentage']; ?>％</span>
+          <table class="table">
             <tr>
-              <td>種類</td>
-              <td>割合</td>
+              <th>種類</th>
+              <th>割合</th>
             </tr>
             <?php
             foreach($result_kind as $value_kind){
@@ -52,7 +68,10 @@ $result_kind = select_kind(ex_sns($_GET['sns']));
                     <?php
                 }
             }
-
+            ?>
+          </table>
+          <div class="photo">
+            <?php
             //カテゴリーごとの画像の番号を取得
             $result_photoID = photoID_calc(ex_sns($_GET['sns']), $value_category['categoryName']);
             //カテゴリーごとの画像のURLを取得
@@ -72,7 +91,7 @@ $result_kind = select_kind(ex_sns($_GET['sns']));
             //画像の表示
             for($i = 0; $i < 4; $i++){
                 ?>
-                <img src="<?php echo $url_unique[$i]; ?>" width="100" height="100"/>
+                <img src="<?php echo $url_unique[$i]; ?>" width="150" height="150"/>
                 <?php
             }
 
@@ -80,12 +99,15 @@ $result_kind = select_kind(ex_sns($_GET['sns']));
             $url_array = array();
             $key = 0;
             ?>
-          </table><br>
-          <?php
+            </div>
+            <?php
       }
       ?>
-    </form>
-    <?php echo return_top(); ?><br>
-    <a href="<?php echo CONTACT; ?>">お問い合わせ</a>
+    </form></div>
+    <div id="footer">
+    <div class="link">
+    <?php echo return_top(); ?>
+    <span style="margin-left: 63px">
+    <a href="<?php echo CONTACT; ?>">お問い合わせ</a></span></div></div>
   </body>
 </html>
