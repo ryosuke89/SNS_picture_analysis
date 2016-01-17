@@ -9,13 +9,13 @@ function return_top(){
 //SNS名からSNSの番号を返却する関数
 function ex_sns($snsName){
     switch ($snsName){
-        case "Twitter";
+        case "".TWT."";
             return 1;
-        case "Facebook";
+        case "".FB."";
             return 2;
         case "Google ";
             return 3;
-        case "Instagram";
+        case "".INS."";
             return 4;
     }
 }
@@ -69,7 +69,11 @@ function chart($get_sns, $result_category){
         ?>
 
         //チャートオプションの設定
-        var options = {'title':'<?php if(empty($get_sns)){echo 'SNS全体';}elseif($get_sns == 'Google '){echo 'Google+';}else{echo $get_sns;} ?>の割合',
+        var options = {'title':'<?php if(empty($get_sns)){echo 'SNS全体';}elseif($get_sns == 'Google '){echo GGP;}else{echo $get_sns;} ?>の割合',
+                        'titleTextStyle': {bold: true, fontSize: 20},
+                        legend: {textStyle: {fontSize: 16}},
+                        'pieSliceTextStyle': {fontSize: 16},
+                        'tooltipTextStyle': {fontSize: 16},
                         'width':600,
                         'height':400};
 
@@ -177,6 +181,10 @@ function detail_chart($get_sns, $get_category, $kind_array){
             ?>
             //チャートオプションの設定
             var options1 = {'title':'<?php echo TWT . 'での' . $get_category; ?>の割合',
+                            'titleTextStyle': {bold: true, fontSize: 20},
+                            legend: {textStyle: {fontSize: 16}},
+                            'pieSliceTextStyle': {fontSize: 16},
+                            'tooltipTextStyle': {fontSize: 16},
                             'width':600,
                             'height':400};
             <?php
@@ -185,6 +193,10 @@ function detail_chart($get_sns, $get_category, $kind_array){
         if($flag_FB == true){
             ?>
             var options2 = {'title':'<?php echo FB . 'での' . $get_category; ?>の割合',
+                            'titleTextStyle': {bold: true, fontSize: 20},
+                            legend: {textStyle: {fontSize: 16}},
+                            'pieSliceTextStyle': {fontSize: 16},
+                            'tooltipTextStyle': {fontSize: 16},
                             'width':600,
                             'height':400};
             <?php
@@ -193,6 +205,10 @@ function detail_chart($get_sns, $get_category, $kind_array){
         if($flag_GGP == true){
             ?>
             var options3 = {'title':'<?php echo GGP . 'での' . $get_category; ?>の割合',
+                            'titleTextStyle': {bold: true, fontSize: 20},
+                            legend: {textStyle: {fontSize: 16}},
+                            'pieSliceTextStyle': {fontSize: 16},
+                            'tooltipTextStyle': {fontSize: 16},
                             'width':600,
                             'height':400};
             <?php
@@ -201,6 +217,10 @@ function detail_chart($get_sns, $get_category, $kind_array){
         if($flag_INS == true){
             ?>
             var options4 = {'title':'<?php echo INS . 'での' . $get_category; ?>の割合',
+                            'titleTextStyle': {bold: true, fontSize: 20},
+                            legend: {textStyle: {fontSize: 16}},
+                            'pieSliceTextStyle': {fontSize: 16},
+                            'tooltipTextStyle': {fontSize: 16},
                             'width':600,
                             'height':400};
             <?php
