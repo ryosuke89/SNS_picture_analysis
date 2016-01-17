@@ -11,6 +11,7 @@ $result_category = select_category(5);
 <head>
   <meta charset="UTF-8">
   <title>SNS Photos</title>
+  <link rel="stylesheet" type="text/css" href="../css/css_index.css">
   <!--AJAX APIの読み込み-->
   <script type="text/javascript" src="https://www.google.com/jsapi"></script>
   <script type="text/javascript" src="scriptUtil.php"></script>
@@ -21,18 +22,25 @@ $result_category = select_category(5);
 </head>
   <body>
     <!--ヘッダー-->
-    <h1><a href="<?php echo ROOT_URL; ?>">SNS Photos</a></h1>
-    <h4>SNSに投稿されている画像の傾向分析サイト</h4><br>
+    <div id="header"><div class="title"><a href="<?php echo ROOT_URL; ?>">
+    <span style="vertical-align: middle; font-size: 35px;">SNS Photos</span></a>
+    <span style="vertical-align: 3px; font-size: 50%; margin-left: 20px">
+    SNSに投稿されている画像の傾向分析サイト</span></div></div>
+    <div id="content">
     <!--円グラフの表示-->
     <div id="chart_div"></div>
     <form action="<?php echo SNS; ?>" method="POST">
-      SNS<br><br>
+      <div class="sns">
+      <div class="text">
+      SNS</div>
       <a href="<?php echo SNS; ?>?sns=Twitter">Twitter</a><br>
-      <a href="<?php echo SNS; ?>?sns=Facebook">Facebook</a><br>
+      Facebook<br>
       Google+<br>
-      Instagram<br><br><br>
+      Instagram</div>
 
-      カテゴリー<br><br>
+      <div class="category">
+      <div class="text">
+      カテゴリー</div>
       <?php
       foreach($result_category as $value_category){
           ?>
@@ -40,11 +48,14 @@ $result_category = select_category(5);
           <?php
       }
       ?>
-      <br><br>
-    </form>
+      <br><br></div>
+    </form></div>
 
     <!--フッター-->
-    <?php echo return_top(); ?><br>
-    <a href="<?php echo CONTACT; ?>">お問い合わせ</a>
+    <div id="footer">
+    <div class="link">
+    <?php echo return_top(); ?>
+    <span style="margin-left: 63px">
+    <a href="<?php echo CONTACT; ?>">お問い合わせ</a></span></div></div>
   </body>
 </html>
