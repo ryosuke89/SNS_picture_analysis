@@ -48,7 +48,7 @@
     }else{
         //画像認識の処理
         //画像のURLをDBから取得
-        $photo_array = select_photo();
+        $photo_array = select_all('photo');
 
         //photoIDと配列番号を同じにする処理
         $first_array = $first - 1;
