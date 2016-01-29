@@ -6,10 +6,12 @@
 </head>
   <body>
     <?php
-    //カテゴリーテーブル、種類テーブルにレコードがないことを確認する
-    $db = false; //trueの場合：集計結果をDBに追加
     //SNSの番号を入力
-    $snsID = 5; //1:Twitter、2:Facebook、3:Google+、4:Instagram、5:SNS全体
+    $snsID = 5;   //1:Twitter、2:Facebook、3:Google+、4:Instagram、5:SNS全体
+    //同じSNSのレコードがないことを確認する
+    $db = false;  //trueの場合：集計結果をDBに追加
+    //カテゴリーの数を指定
+    $num = 8;
 
     //カテゴリーごとの件数を取得
     $result_category = category_calc($snsID);
@@ -63,7 +65,7 @@
       </tr>
       <?php
       //カテゴリーごとに種類の集計結果を取得
-      for($i = 0; $i < 8; $i++){
+      for($i = 0; $i < $num; $i++){
           //種類ごとの件数を取得
           $result_kind = kind_calc($snsID, $select_category[$i]['categoryName']);
           //カテゴリーごとのレコード件数を取得
@@ -74,7 +76,7 @@
               $kindName = $value_kind['calcKind'];
               $kindPercentage = $value_kind['count(calcKind)'] / $result_category_count[0]['count(*)'] * 100;
               foreach($select_category as $value_category){
-                  if($value_category['categoryName'] == $value_kind['calcCategory']){
+                  if($value_category['categoryName'] == $value_kind['calcCategory'] && $value_category['snsID'] == $snsID){
                       $kind_categoryID = $value_category['categoryID'];
                   }
               }
