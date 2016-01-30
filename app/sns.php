@@ -8,17 +8,23 @@ if(empty($_GET['sns'])){
     $_GET['sns'] = null;
 }
 
-//GETを受け取れない、またはGETで受け取ったものが存在しない場合、トップページに移動する処理
-if($_GET['sns'] != TWT && $_GET['sns'] != FB && $_GET['sns'] != 'Google ' && $_GET['sns'] != INS){
-    ?>
-    <meta http-equiv="refresh" content="0; URL=<?php echo ROOT_URL; ?>">
-    <?php
-}
-
 //categoryテーブルの値を割合が高い順に取得
 $result_category = select_category(ex_sns($_GET['sns']));
 //kindテーブルの値を割合が高い順に取得
 $result_kind = select_kind(ex_sns($_GET['sns']));
+
+//GETを受け取れない、またはGETで受け取ったものが存在しない場合、トップページに移動する処理
+$flag = false;
+foreach($result_category as $value_category){
+    if(ex_sns($_GET['sns']) == $value_category['snsID']){
+        $flag = true;
+    }
+}
+if($flag == false){
+    ?>
+    <meta http-equiv="refresh" content="0; URL=<?php echo ROOT_URL; ?>">
+    <?php
+}
 ?>
 <!DOCTYPE html>
 <html lang="ja">
