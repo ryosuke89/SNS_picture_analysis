@@ -6,8 +6,33 @@ require_once '../common/dbaccesUtil.php';
 //エラーを表示させない処理
 if(empty($_GET['category'])){
     $_GET['category'] = null;
+}
+
+//カテゴリーのGETを受け取れない、またはGETで受け取ったものが存在しない場合、トップページに移動する処理
+$flag_get = false;
+foreach($_GET as $key => $value){
+    if($key != 'sns' && $key !='category'){
+        $flag_get = true;
+    }
+}
+$flag = false;
+if(empty($_GET['sns'])){
+    $select_category = select_category(5);
+    foreach($select_category as $value_select){
+        if($_GET['category'] == $value_select['categoryName']){
+            $flag = true;
+        }
+    }
+}else{
+    $select_category = select_category(ex_sns($_GET['sns']));
+    foreach($select_category as $value_select){
+        if(ex_sns($_GET['sns']) == $value_select['snsID'] && $_GET['category'] == $value_select['categoryName']){
+            $flag = true;
+        }
+    }
+}
+if($flag_get == true || $flag == false){
     ?>
-    <!--GETを受け取れない場合、トップページに移動する処理-->
     <meta http-equiv="refresh" content="0; URL=<?php echo ROOT_URL; ?>">
     <?php
 }
