@@ -78,7 +78,7 @@ if($flag == false){
               </tr>
               <?php
               foreach($result_kind as $value_kind){
-                  if($value_category['categoryID'] == $value_kind['categoryID']){
+                  if($value_category['categoryID'] == $value_kind['categoryID'] && $value_kind['kindPercentage'] >= 1){
                       ?>
                       <tr>
                         <td><?php echo $value_kind['kindName']; ?></td>
