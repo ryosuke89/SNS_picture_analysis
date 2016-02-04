@@ -6,7 +6,7 @@
 </head>
   <body>
     <?php
-    //list_insert.phpに空欄がないことを確認する
+    //list_insert.phpで入力フォームが表示されないことを確認する
     $db = true; //trueの場合：DBに追加
 
     //変換する範囲のrecognitionIDを入力
