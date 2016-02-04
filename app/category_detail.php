@@ -115,7 +115,7 @@ if(empty($_GET['sns'])){
                       </tr>
                       <?php
                       foreach($kind_array as $value_kind_array){
-                          if($value_category['categoryID'] == $value_kind_array['categoryID']){
+                          if($value_category['categoryID'] == $value_kind_array['categoryID'] && $value_kind_array['kindPercentage'] >= 1){
                               ?>
                               <tr>
                                 <td><?php echo $value_kind_array['kindName']; ?></td>
